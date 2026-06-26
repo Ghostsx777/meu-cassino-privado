@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fortune Tiger - Cloud Premium</title>
+    <title>Cassino Privado Hub - Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -24,35 +24,39 @@
 </head>
 <body class="bg-zinc-950 text-white min-h-screen flex flex-col items-center justify-center p-2">
 
-    <div class="w-full max-w-sm bg-zinc-900 rounded-[36px] border-4 border-stone-800 shadow-2xl overflow-hidden relative min-h-[630px] flex flex-col justify-between">
-        
-        <div class="bg-black/80 px-4 py-2 flex justify-between items-center border-b border-stone-800 text-xs">
-            <div>
-                <span class="text-[9px] text-stone-400 block uppercase font-bold tracking-wider">Saldo Nuvem</span>
-                <span id="saldo-display" class="font-mono font-bold text-emerald-400 text-sm">R$ 0,00</span>
-            </div>
-            <button onclick="UI.toggleAdminModal(true)" class="text-stone-600 hover:text-yellow-500 transition p-1"><i data-lucide="shield" class="w-4 h-4"></i></button>
+    <div class="w-full max-w-sm bg-zinc-900 rounded-t-[36px] border-t-4 border-x-4 border-stone-800 p-4 flex justify-between items-center text-xs">
+        <div>
+            <span class="text-[9px] text-stone-400 block uppercase font-bold tracking-wider">Saldo Global</span>
+            <span id="saldo-display" class="font-mono font-bold text-emerald-400 text-lg">R$ 0,00</span>
         </div>
+        <div class="flex items-center space-x-2">
+            <button onclick="UI.mudarJogo('tiger')" class="bg-amber-600 px-3 py-1 rounded-lg text-[10px] font-bold">🐯 Tiger</button>
+            <button onclick="UI.mudarJogo('mines')" class="bg-blue-600 px-3 py-1 rounded-lg text-[10px] font-bold">💣 Mines</button>
+            <button onclick="UI.toggleAdminModal(true)" class="text-stone-400 hover:text-yellow-500 p-1"><i data-lucide="shield" class="w-4 h-4"></i></button>
+        </div>
+    </div>
 
-        <div class="bg-chinese-red flex-1 flex flex-col justify-between relative">
-            <div class="w-full bg-gradient-to-b from-emerald-600 to-emerald-800 pt-4 pb-3 text-center relative border-b-[3px] border-yellow-500">
-                <div class="text-5xl id="tiger-character">🐯</div>
-                <h2 class="text-sm font-black text-yellow-400 tracking-widest font-oriental mt-1">FORTUNE TIGER</h2>
+    <div class="w-full max-w-sm bg-zinc-900 rounded-b-[36px] border-b-4 border-x-4 border-stone-800 shadow-2xl overflow-hidden relative min-h-[550px] flex flex-col justify-between">
+        
+        <div id="game-tiger" class="bg-chinese-red flex-1 flex flex-col justify-between relative">
+            <div class="w-full bg-gradient-to-b from-emerald-600 to-emerald-800 pt-3 pb-2 text-center border-b-[3px] border-yellow-500">
+                <div class="text-4xl">🐯</div>
+                <h2 class="text-xs font-black text-yellow-400 tracking-widest font-oriental">FORTUNE TIGER</h2>
             </div>
 
-            <div class="p-3 flex-1 flex flex-col justify-center">
+            <div class="p-4 flex-1 flex flex-col justify-center">
                 <div class="grid grid-cols-3 gap-1 bg-amber-950 p-2 rounded-xl gold-frame relative">
-                    <div id="roll-1" class="slot-window rounded-l-lg p-1 flex flex-col justify-around items-center h-48 overflow-hidden">
+                    <div id="roll-1" class="slot-window rounded-l-lg p-1 flex flex-col justify-around items-center h-40 overflow-hidden">
                         <div id="r1-s1" class="w-12 h-12 flex items-center justify-center"></div>
                         <div id="r1-s2" class="w-12 h-12 flex items-center justify-center"></div>
                         <div id="r1-s3" class="w-12 h-12 flex items-center justify-center"></div>
                     </div>
-                    <div id="roll-2" class="slot-window p-1 flex flex-col justify-around items-center h-48 overflow-hidden">
+                    <div id="roll-2" class="slot-window p-1 flex flex-col justify-around items-center h-40 overflow-hidden">
                         <div id="r2-s1" class="w-12 h-12 flex items-center justify-center"></div>
                         <div id="r2-s2" class="w-12 h-12 flex items-center justify-center"></div>
                         <div id="r2-s3" class="w-12 h-12 flex items-center justify-center"></div>
                     </div>
-                    <div id="roll-3" class="slot-window rounded-r-lg p-1 flex flex-col justify-around items-center h-48 overflow-hidden">
+                    <div id="roll-3" class="slot-window rounded-r-lg p-1 flex flex-col justify-around items-center h-40 overflow-hidden">
                         <div id="r3-s1" class="w-12 h-12 flex items-center justify-center"></div>
                         <div id="r3-s2" class="w-12 h-12 flex items-center justify-center"></div>
                         <div id="r3-s3" class="w-12 h-12 flex items-center justify-center"></div>
@@ -60,42 +64,59 @@
                 </div>
             </div>
 
-            <div class="bg-red-950/90 border-t border-yellow-600/30 px-3 py-1.5 grid grid-cols-3 gap-1 text-center font-mono text-[10px] text-yellow-200">
-                <div class="bg-black/40 rounded py-0.5 border border-stone-800">
-                    <span class="text-stone-400 block text-[8px]">Ganhos</span>
-                    <span id="txt-ganho-display" class="font-bold text-white">R$ 0,00</span>
-                </div>
-                <div class="bg-black/40 rounded py-0.5 border border-stone-800">
+            <div class="bg-red-950/90 px-3 py-2 grid grid-cols-2 gap-2 text-center font-mono text-[10px] text-yellow-200 border-t border-yellow-600/20">
+                <div class="bg-black/40 rounded py-1 border border-stone-800">
                     <span class="text-stone-400 block text-[8px]">Aposta</span>
                     <span id="txt-aposta-display" class="font-bold text-yellow-400">R$ 10,00</span>
                 </div>
-                <div class="bg-black/40 rounded py-0.5 border border-stone-800">
-                    <span class="text-stone-400 block text-[8px]">Prêmio Total</span>
+                <div class="bg-black/40 rounded py-1 border border-stone-800">
+                    <span class="text-stone-400 block text-[8px]">Prêmio Recente</span>
                     <span id="txt-premio-display" class="font-bold text-emerald-400">R$ 0,00</span>
                 </div>
             </div>
+
+            <div class="bg-stone-900 p-3 space-y-2">
+                <div class="flex items-center justify-center space-x-3">
+                    <button onclick="Core.ajustarAposta(-10)" class="w-8 h-8 rounded-full bg-amber-500 text-black font-black text-lg">-</button>
+                    <input type="number" id="global-bet-input" value="10" class="w-20 bg-black text-center text-yellow-400 font-mono rounded border border-stone-700 p-1 text-xs">
+                    <button onclick="Core.ajustarAposta(10)" class="w-8 h-8 rounded-full bg-amber-500 text-black font-black text-lg">+</button>
+                </div>
+                <button id="btn-spin" onclick="Core.jogarTiger()" class="w-full bg-emerald-600 hover:bg-emerald-500 font-bold py-2 rounded-xl text-xs uppercase tracking-wider">Girar Roleta</button>
+            </div>
         </div>
 
-        <div class="bg-gradient-to-b from-stone-900 to-black p-4 space-y-3 border-t border-stone-800">
-            <div class="flex items-center justify-center space-x-4">
-                <button onclick="Core.ajustarAposta(-10)" class="w-8 h-8 rounded-full bg-gradient-to-b from-yellow-400 to-amber-600 text-stone-950 font-black text-xl">-</button>
-                <div class="text-center bg-stone-950 border border-stone-800 rounded-xl px-4 py-1 min-w-[130px]">
-                    <span class="text-[8px] text-stone-400 block font-bold">Aposta Máx 10k</span>
-                    <div class="flex items-center justify-center text-yellow-400 font-mono font-bold text-xs">
-                        R$&nbsp;<input type="number" id="global-bet-input" value="10" min="1" max="10000" onchange="Core.validarAposta()" class="w-16 bg-transparent text-center focus:outline-none font-black">
+        <div id="game-mines" class="bg-zinc-950 flex-1 flex flex-col justify-between relative hidden">
+            <div class="w-full bg-gradient-to-b from-blue-700 to-blue-900 py-2 text-center border-b-[3px] border-blue-400">
+                <h2 class="text-xs font-black text-white tracking-widest">💣 MINES PREMIUM</h2>
+            </div>
+
+            <div class="p-4 flex-1 flex items-center justify-center">
+                <div id="mines-grid" class="grid grid-cols-5 gap-1.5 p-2 bg-zinc-900 rounded-xl border border-zinc-800 max-w-[280px]">
+                    </div>
+            </div>
+
+            <div class="bg-zinc-900 p-3 space-y-2 border-t border-zinc-800">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[9px] text-zinc-400 block mb-1">Aposta R$</label>
+                        <input type="number" id="mines-bet" value="10" class="w-full bg-black text-white p-1.5 rounded text-xs text-center border border-zinc-700">
+                    </div>
+                    <div>
+                        <label class="text-[9px] text-zinc-400 block mb-1">Minas (1-24)</label>
+                        <input type="number" id="mines-count" value="3" class="w-full bg-black text-white p-1.5 rounded text-xs text-center border border-zinc-700">
                     </div>
                 </div>
-                <button onclick="Core.ajustarAposta(10)" class="w-8 h-8 rounded-full bg-gradient-to-b from-yellow-400 to-amber-600 text-stone-950 font-black text-xl">+</button>
-            </div>
-            <div class="flex justify-center">
-                <button id="btn-spin" onclick="Core.jogar()" class="w-14 h-14 rounded-full bg-gradient-to-b from-emerald-400 to-teal-700 border-4 border-yellow-400 flex items-center justify-center"><i data-lucide="play" class="w-5 h-5 text-white fill-white ml-0.5"></i></button>
+                <div class="flex space-x-2">
+                    <button id="btn-start-mines" onclick="Core.iniciarMines()" class="flex-1 bg-blue-600 font-bold py-2 rounded-xl text-xs uppercase">Começar Jogo</button>
+                    <button id="btn-cashout-mines" onclick="Core.cashoutMines()" disabled class="flex-1 bg-amber-600 opacity-50 font-bold py-2 rounded-xl text-xs uppercase">Cashout</button>
+                </div>
             </div>
         </div>
 
-        <div class="p-2 bg-black border-t border-stone-900">
+        <div class="p-3 bg-black border-t border-stone-900">
             <div class="flex space-x-2 bg-stone-950 p-1 rounded-xl border border-stone-800">
-                <input type="text" id="input-cupom" placeholder="CÓDIGO DE RECARGA" class="w-full bg-transparent text-[9px] px-2 text-center uppercase tracking-widest text-slate-400 focus:outline-none">
-                <button onclick="Core.resgatar()" class="bg-stone-800 text-yellow-500 text-[9px] font-bold px-3 py-1 rounded-lg">Inserir</button>
+                <input type="text" id="input-cupom" placeholder="CÓDIGO DE RECARGA VOUCHER" class="w-full bg-transparent text-[10px] px-2 text-center uppercase tracking-widest text-slate-300 focus:outline-none">
+                <button onclick="Core.resgatar()" class="bg-amber-500 text-black text-[10px] font-bold px-4 py-1.5 rounded-lg transition hover:bg-amber-400">Resgatar</button>
             </div>
         </div>
     </div>
@@ -115,16 +136,21 @@
 
     <script>
         const SVGS = {
-            'WILD': `<svg viewBox="0 0 64 64" class="w-12 h-12"><circle cx="32" cy="32" r="28" fill="url(#gT)" stroke="#f57f17" stroke-width="2"/><text x="32" y="32" font-weight="900" font-size="14" fill="#fff" text-anchor="middle" dominant-baseline="middle">WILD</text><text x="32" y="48" font-size="12" text-anchor="middle" dominant-baseline="middle">🐯</text><defs><linearGradient id="gT"><stop offset="0%" stop-color="#ff9800"/><stop offset="100%" stop-color="#e65100"/></linearGradient></defs></svg>`,
-            'OURO': `<svg viewBox="0 0 64 64" class="w-12 h-12"><path d="M12 40 Q 32 50 52 40 L 56 24 Q 32 32 8 24 Z" fill="url(#gO)" stroke="#ffb300" stroke-width="2"/><ellipse cx="32" cy="24" rx="16" ry="6" fill="#fff59d"/><defs><linearGradient id="gO" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffd54f"/><stop offset="100%" stop-color="#ff8f00"/></linearGradient></defs></svg>`,
-            'ENVELOPE': `<svg viewBox="0 0 64 64" class="w-10 h-10"><rect x="12" y="14" width="40" height="36" rx="4" fill="#e53935" stroke="#b71c1c" stroke-width="2"/><polygon points="12,14 32,32 52,14" fill="#c62828"/><circle cx="32" cy="34" r="6" fill="#fbc02d"/></svg>`,
-            'FOGOS': `<svg viewBox="0 0 64 64" class="w-10 h-10"><path d="M24 16 L40 16 L36 48 L28 48 Z" fill="#1e88e5"/><rect x="26" y="10" width="12" height="6" fill="#e53935"/><line x1="32" y1="48" x2="32" y2="58" stroke="#ffb300" stroke-width="3"/></svg>`,
-            'LARANJA': `<svg viewBox="0 0 64 64" class="w-10 h-10"><circle cx="32" cy="36" r="18" fill="#ff9800"/><path d="M32 18 Q 36 12 30 10 Q 26 12 32 18" fill="#4caf50"/></svg>`
+            'WILD': `<svg viewBox="0 0 64 64" class="w-10 h-10"><circle cx="32" cy="32" r="28" fill="url(#gT)" stroke="#f57f17" stroke-width="2"/><text x="32" y="32" font-weight="900" font-size="12" fill="#fff" text-anchor="middle" dominant-baseline="middle">WILD</text></svg>`,
+            'OURO': `<svg viewBox="0 0 64 64" class="w-10 h-10"><rect x="16" y="20" width="32" height="24" fill="#ffd700" rx="3"/></svg>`,
+            'ENVELOPE': `<svg viewBox="0 0 64 64" class="w-10 h-10"><rect x="12" y="14" width="40" height="36" rx="4" fill="#e53935"/></svg>`,
+            'FOGOS': `<svg viewBox="0 0 64 64" class="w-10 h-10"><circle cx="32" cy="32" r="15" fill="#1e88e5"/></svg>`,
+            'LARANJA': `<svg viewBox="0 0 64 64" class="w-10 h-10"><circle cx="32" cy="36" r="16" fill="#ff9800"/></svg>`
         };
-        const chavesItens = ['WILD', 'OURO', 'ENVELOPE', 'FOGOS', 'LARANJA'];
         let girando = false;
+        let minesEmAndamento = false;
 
         const UI = {
+            mudarJogo: (jogo) => {
+                document.getElementById('game-tiger').classList.toggle('hidden', jogo !== 'tiger');
+                document.getElementById('game-mines').classList.toggle('hidden', jogo !== 'mines');
+                if(jogo === 'mines') UI.buildMinesGrid();
+            },
             atualizarSaldo: async () => {
                 const res = await fetch('/api/saldo');
                 const data = await res.json();
@@ -141,79 +167,137 @@
                 const mock = ['OURO', 'WILD', 'FOGOS', 'ENVELOPE', 'ENVELOPE', 'LARANJA', 'LARANJA', 'WILD', 'OURO'];
                 let idx = 0;
                 for(let r=1; r<=3; r++){
-                    for(let s=1; s<=3; s++) document.getElementById(`r${r}-s${s}`).innerHTML = SVGS[mock[idx++]];
+                    for(let s=1; s<=3; s++) document.getElementById(`r${r}-s${s}`).innerHTML = SVGS[mock[idx++]] || '💎';
+                }
+            },
+            buildMinesGrid: () => {
+                const g = document.getElementById('mines-grid');
+                g.innerHTML = '';
+                for(let i=0; i<25; i++) {
+                    g.innerHTML += `<button onclick="Core.clicarMines(${i})" id="mine-${i}" disabled class="w-11 h-11 bg-zinc-800 rounded-lg border border-zinc-700 flex items-center justify-center font-bold text-lg hover:bg-zinc-700 transition-all">❓</button>`;
                 }
             }
         };
 
         const Core = {
-            validarAposta: () => {
+            ajustarAposta: (qtd) => {
                 const inp = document.getElementById('global-bet-input');
-                let val = parseFloat(inp.value) || 10;
-                if(val < 1) val = 1; if(val > 10000) val = 10000;
+                let val = (parseFloat(inp.value) || 10) + qtd;
+                if(val < 1) val = 1;
                 inp.value = val;
                 document.getElementById('txt-aposta-display').innerText = val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             },
-            ajustarAposta: (qtd) => {
+            jogarTiger: async () => {
                 if(girando) return;
-                const inp = document.getElementById('global-bet-input');
-                inp.value = (parseFloat(inp.value) || 10) + qtd;
-                Core.validarAposta();
-            },
-            jogar: async () => {
-                Core.validarAposta();
                 const aposta = parseFloat(document.getElementById('global-bet-input').value);
-                if(girando) return;
 
+                girando = true;
                 document.getElementById('roll-1').classList.add('blur-spin');
                 document.getElementById('roll-2').classList.add('blur-spin');
                 document.getElementById('roll-3').classList.add('blur-spin');
-                girando = true;
 
-                // Faz a requisição segura para o Back-end
-                const resposta = await fetch('/api/jogar-tiger', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ aposta })
-                });
-                
-                const data = await resposta.json();
-                if(!resposta.ok) {
-                    UI.notify(data.erro, false);
-                    document.getElementById('roll-1').classList.remove('blur-spin');
-                    document.getElementById('roll-2').classList.remove('blur-spin');
-                    document.getElementById('roll-3').classList.remove('blur-spin');
-                    girando = false;
-                    return;
-                }
-
-                let ciclos = 0;
-                const randomKey = () => chavesItens[Math.floor(Math.random() * chavesItens.length)];
-                
-                const animacao = setInterval(() => {
-                    for(let r=1; r<=3; r++) {
-                        for(let s=1; s<=3; s++) document.getElementById(`r${r}-s${s}`).innerHTML = SVGS[randomKey()];
+                try {
+                    const resposta = await fetch('/api/jogar-tiger', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ aposta })
+                    });
+                    
+                    const data = await resposta.json();
+                    
+                    if(!resposta.ok) {
+                        UI.notify(data.erro, false);
+                        throw new Error(data.erro);
                     }
-                    if(ciclos++ > 10) {
-                        clearInterval(animacao);
+
+                    setTimeout(() => {
                         document.getElementById('roll-1').classList.remove('blur-spin');
                         document.getElementById('roll-2').classList.remove('blur-spin');
                         document.getElementById('roll-3').classList.remove('blur-spin');
 
-                        // Aplica o resultado real vindo da nuvem
                         for(let r=1; r<=3; r++) {
                             for(let s=1; s<=3; s++) document.getElementById(`r${r}-s${s}`).innerHTML = SVGS[data.matriz[r-1][s-1]];
                         }
 
                         if(data.ganhou) {
-                            document.getElementById('txt-ganho-display').innerText = "R$ " + data.premio.toFixed(2);
                             document.getElementById('txt-premio-display').innerText = "R$ " + data.premio.toFixed(2);
                             UI.notify(`VITÓRIA! +R$ ${data.premio.toFixed(2)}`);
+                        } else {
+                            document.getElementById('txt-premio-display').innerText = "R$ 0,00";
                         }
                         UI.atualizarSaldo();
                         girando = false;
-                    }
-                }, 80);
+                    }, 1000);
+
+                } catch (e) {
+                    document.getElementById('roll-1').classList.remove('blur-spin');
+                    document.getElementById('roll-2').classList.remove('blur-spin');
+                    document.getElementById('roll-3').classList.remove('blur-spin');
+                    girando = false;
+                }
+            },
+            iniciarMines: async () => {
+                const aposta = parseFloat(document.getElementById('mines-bet').value);
+                const minas = parseInt(document.getElementById('mines-count').value);
+
+                const res = await fetch('/api/mines/iniciar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ aposta, minas })
+                });
+                const data = await res.json();
+
+                if(!res.ok) return UI.notify(data.erro, false);
+
+                minesEmAndamento = true;
+                UI.atualizarSaldo();
+                UI.buildMinesGrid();
+                
+                // Ativar os botões do tabuleiro
+                for(let i=0; i<25; i++) document.getElementById(`mine-${i}`).disabled = false;
+                document.getElementById('btn-cashout-mines').disabled = false;
+                document.getElementById('btn-cashout-mines').classList.remove('opacity-50');
+                UI.notify("Mines Iniciado! Escolha as cartas.");
+            },
+            clicarMines: async (index) => {
+                if(!minesEmAndamento) return;
+
+                const res = await fetch('/api/mines/revelar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ index })
+                });
+                const data = await res.json();
+
+                const btn = document.getElementById(`mine-${index}`);
+                if(data.perdeu) {
+                    btn.innerText = '💥';
+                    btn.classList.add('bg-red-600');
+                    UI.notify("BOMBA! Você perdeu tudo.", false);
+                    minesEmAndamento = false;
+                    document.getElementById('btn-cashout-mines').disabled = true;
+                    document.getElementById('btn-cashout-mines').classList.add('opacity-50');
+                    UI.atualizarSaldo();
+                } else {
+                    btn.innerText = '💎';
+                    btn.classList.add('bg-emerald-600');
+                    btn.disabled = true;
+                    document.getElementById('btn-cashout-mines').innerText = `Cashout (R$ ${data.proximoPremio.toFixed(2)})`;
+                }
+            },
+            cashoutMines: async () => {
+                const res = await fetch('/api/mines/cashout', { method: 'POST' });
+                const data = await res.json();
+
+                if(!res.ok) return UI.notify(data.erro, false);
+
+                UI.notify(`Lucro salvo! +R$ ${data.ganho.toFixed(2)}`);
+                minesEmAndamento = false;
+                document.getElementById('btn-cashout-mines').disabled = true;
+                document.getElementById('btn-cashout-mines').classList.add('opacity-50');
+                document.getElementById('btn-cashout-mines').innerText = "Cashout";
+                UI.atualizarSaldo();
+                UI.buildMinesGrid();
             },
             resgatar: async () => {
                 const token = document.getElementById('input-cupom').value;
@@ -223,8 +307,13 @@
                     body: JSON.stringify({ token })
                 });
                 const data = await res.json();
-                if(res.ok) { UI.notify("Saldo Carregado!"); UI.atualizarSaldo(); document.getElementById('input-cupom').value = ''; }
-                else { UI.notify(data.erro, false); }
+                if(res.ok) { 
+                    UI.notify("Saldo Carregado!"); 
+                    document.getElementById('input-cupom').value = ''; 
+                    await UI.atualizarSaldo(); 
+                } else { 
+                    UI.notify(data.erro, false); 
+                }
             },
             gerarVoucher: async () => {
                 const senha = document.getElementById('admin-password').value;

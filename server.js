@@ -9,10 +9,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Banco de dados temporário na memória do servidor
 let bancoDados = {
     saldo: 1000.00,
-    vouchers: {}
+    vouchers: {},
+    minesAtivo: null // Guarda o estado do jogo Mines atual
 };
 
-// Itens do jogo
+// Itens do jogo Tigrinho
 const chavesItens = ['WILD', 'OURO', 'ENVELOPE', 'FOGOS', 'LARANJA'];
 
 // Rota para buscar o saldo atual seguro
@@ -20,7 +21,7 @@ app.get('/api/saldo', (req, res) => {
     res.json({ saldo: bancoDados.saldo });
 });
 
-// Rota protegida: O sorteio é processado aqui no servidor
+// ==================== ROTAS DO TIGRINHO ====================
 app.post('/api/jogar-tiger', (req, res) => {
     let { aposta } = req.body;
     aposta = parseFloat(aposta);
@@ -32,10 +33,8 @@ app.post('/api/jogar-tiger', (req, res) => {
         return res.status(400).json({ erro: 'Saldo insuficiente.' });
     }
 
-    // Deduz o valor da aposta
     bancoDados.saldo -= aposta;
 
-    // Sorteio dos rolos feito no servidor
     const randomKey = () => chavesItens[Math.floor(Math.random() * chavesItens.length)];
     let mFinal = [
         [randomKey(), randomKey(), randomKey()],
@@ -43,13 +42,12 @@ app.post('/api/jogar-tiger', (req, res) => {
         [randomKey(), randomKey(), randomKey()]
     ];
 
-    // Forçador algorítmico de ganho controlado (35% de chance)
+    // 35% de chance de forçar ganho
     if (Math.random() < 0.35) {
         const escolhido = chavesItens[Math.floor(Math.random() * 3) + 2];
         mFinal = [[escolhido, 'WILD', escolhido], [randomKey(), escolhido, randomKey()], [escolhido, escolhido, 'WILD']];
     }
 
-    // Verificação de vitória
     let ganhou = false;
     let multTotal = 0;
 
@@ -76,7 +74,82 @@ app.post('/api/jogar-tiger', (req, res) => {
     });
 });
 
-// Gerar cupom (Admin)
+// ==================== ROTAS DO MINES ====================
+app.post('/api/mines/iniciar', (req, res) => {
+    let { aposta, minas } = req.body;
+    aposta = parseFloat(aposta);
+    minas = parseInt(minas);
+
+    if (isNaN(aposta) || aposta < 1 || bancoDados.saldo < aposta) {
+        return res.status(400).json({ erro: 'Aposta inválida ou saldo insuficiente.' });
+    }
+    if (isNaN(minas) || minas < 1 || minas > 24) {
+        return res.status(400).json({ erro: 'Quantidade de minas inválida.' });
+    }
+
+    bancoDados.saldo -= aposta;
+
+    // Gerar tabuleiro oculto com as bombas (0 a 24)
+    const tabuleiro = Array(25).fill('diamante');
+    let bombasColocadas = 0;
+    while (bombasColocadas < minas) {
+        let idx = Math.floor(Math.random() * 25);
+        if (tabuleiro[idx] !== 'bomba') {
+            tabuleiro[idx] = 'bomba';
+            bombasColocadas++;
+        }
+    }
+
+    bancoDados.minesAtivo = {
+        aposta,
+        minas,
+        tabuleiro,
+        revelados: [],
+        multiplicador: 1.00
+    };
+
+    res.json({ sucesso: true, novoSaldo: bancoDados.saldo });
+});
+
+app.post('/api/mines/revelar', (req, res) => {
+    if (!bancoDados.minesAtivo) return res.status(400).json({ erro: 'Nenhum jogo ativo.' });
+    
+    const { index } = req.body;
+    const jogo = bancoDados.minesAtivo;
+
+    if (jogo.revelados.includes(index)) return res.status(400).json({ erro: 'Casa já revelada.' });
+
+    jogo.revelados.push(index);
+
+    if (jogo.tabuleiro[index] === 'bomba') {
+        bancoDados.minesAtivo = null; // Perdeu tudo
+        return res.json({ perdeu: true, tabuleiroCompleto: jogo.tabuleiro });
+    }
+
+    // Calcular multiplicador simples baseado nas revelações bem-sucedidas
+    const totalCasasRegulamentares = 25 - jogo.minas;
+    const progresso = jogo.revelados.length / totalCasasRegulamentares;
+    jogo.multiplicador += parseFloat((progresso * 1.5 * (jogo.minas / 3)).toFixed(2));
+
+    res.json({ perdeu: false, tipo: 'diamante', proximoPremio: jogo.aposta * jogo.multiplicador });
+});
+
+app.post('/api/mines/cashout', (req, res) => {
+    if (!bancoDados.minesAtivo || bancoDados.minesAtivo.revelados.length === 0) {
+        return res.status(400).json({ erro: 'Ação inválida.' });
+    }
+
+    const jogo = bancoDados.minesAtivo;
+    const valorGanho = jogo.aposta * jogo.multiplicador;
+    
+    bancoDados.saldo += valorGanho;
+    bancoDados.minesAtivo = null;
+
+    res.json({ sucesso: true, ganho: valorGanho, novoSaldo: bancoDados.saldo });
+});
+
+
+// ==================== SISTEMA DE VOUCHERS ====================
 app.post('/api/admin/gerar-voucher', (req, res) => {
     const { senha, valor } = req.body;
     if (senha !== 'ghost123') return res.status(403).json({ erro: 'Acesso negado' });
@@ -86,10 +159,11 @@ app.post('/api/admin/gerar-voucher', (req, res) => {
     res.json({ token, valor, lista: bancoDados.vouchers });
 });
 
-// Resgatar cupom
 app.post('/api/resgatar-voucher', (req, res) => {
     const { token } = req.body;
+    if (!token) return res.status(400).json({ erro: 'Digite um código.' });
     const tk = token.trim().toUpperCase();
+    
     if (bancoDados.vouchers[tk]) {
         bancoDados.saldo += bancoDados.vouchers[tk];
         delete bancoDados.vouchers[tk];
@@ -99,5 +173,4 @@ app.post('/api/resgatar-voucher', (req, res) => {
     }
 });
 
-// Inicialização do Servidor
 app.listen(PORT, () => console.log(`Servidor privado rodando na porta ${PORT}`));
