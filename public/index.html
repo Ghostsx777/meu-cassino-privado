@@ -495,17 +495,20 @@ const aposta = parseFloat(document.getElementById('mines-bet').value);
                     document.getElementById('btn-cashout-mines').classList.add('opacity-50');
                     UI.atualizarSaldo();
                 } else {
-                    btn.innerText = '💎';
-                    btn.classList.add('bg-emerald-600');
-                    btn.disabled = true;
-                    document.getElementById('btn-cashout-mines').innerText = `Cashout (R$ ${data.proximoPremio.toFixed(2)})`;
-                }
-            },
-            cashoutMines: async () => {
-                const res = await fetch('/api/mines/cashout', { method: 'POST' });
-                const data = await res.json();
+            btn.innerText = '💎';
+            btn.classList.add('bg-emerald-600');
+            btn.disabled = true;
+            document.getElementById('btn-cashout-mines').innerText = `Cashout (R$ ${data.proximoPremio.toFixed(2)})`;
+        }
+    } catch (erro) {
+        console.error(erro);
+    }
+},
+cashoutMines: async () => {
+    const res = await fetch('/api/mines/cashout', { method: 'POST' });
+    const data = await res.json();
 
-                if(!res.ok) return UI.notify(data.erro, false);
+    if (!res.ok) return UI.notify(data.erro, false);
 
                 UI.notify(`Lucro salvo! +R$ ${data.ganho.toFixed(2)}`);
                 minesEmAndamento = false;
