@@ -224,8 +224,7 @@
             notify: (msg, s = true) => {
                 const c = document.getElementById('toast-container');
                 const t = document.createElement('div');
-                t.className = `p-3 rounded-xl shadow-2xl text-xs font-bold border my-2 ${s ? 'bg-emerald-950 text-emerald-400' : 'bg-yellow-950 text-yellow-400'}`;
-                t.innerText = msg; c.appendChild(t); setTimeout(() => t.remove(), 2000);
+                t.className = `p-3 rounded-xl shadow-2xl text-xs font-bold border my-2 ${s ? 'bg-emerald-950 text-emerald-400' : 'bg-red-950 text-red-400'}`;
             },
             setGradeInicial: () => {
                 const mock = ['OURO', 'WILD', 'FOGOS', 'ENVELOPE', 'ENVELOPE', 'LARANJA', 'LARANJA', 'WILD', 'OURO'];
