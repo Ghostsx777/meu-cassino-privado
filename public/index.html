@@ -7,19 +7,26 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Cinzel:wght@700&display=swap');
-        body { font-family: 'Fredoka', sans-serif; }
-        .font-oriental { font-family: 'Cinzel', serif; }
-        .bg-chinese-red { background: linear-gradient(180deg, #e53935 0%, #b71c1c 50%, #4a0000 100%); }
-        .gold-frame {
-            border: 4px solid transparent;
-            border-image: linear-gradient(to bottom, #fff9c4, #fbc02d, #f57f17, #fff9c4) 1;
-            box-shadow: 0 0 20px rgba(251, 192, 45, 0.5), inset 0 0 12px rgba(0,0,0,0.7);
+       /* Efeito Ouro Animado com Luz do Sol */
+        .gold-shine-text {
+            background: linear-gradient(
+                to right, 
+                #bf953f 0%, 
+                #fcf6ba 25%, 
+                #b38728 50%, 
+                #fbf5b7 75%, 
+                #aa771c 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shineGold 4s linear infinite;
         }
-        .slot-window { background: linear-gradient(180deg, #fffdf4 0%, #fbebc6 100%); }
-        .blur-spin { animation: subidaDescida 0.08s infinite alternate; filter: blur(4px) brightness(1.1); }
-        @keyframes subidaDescida { 0% { transform: translateY(-8px); } 100% { transform: translateY(8px); } }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        @keyframes shineGold {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen flex flex-col items-center justify-center p-2">
