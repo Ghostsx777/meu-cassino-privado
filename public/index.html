@@ -135,12 +135,12 @@
     <div id="toast-container" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-full max-w-xs text-center"></div>
 
     <script>
-        const SVGS = {
-            'WILD': `<svg viewBox="0 0 64 64" class="w-10 h-10"><circle cx="32" cy="32" r="28" fill="url(#gT)" stroke="#f57f17" stroke-width="2"/><text x="32" y="32" font-weight="900" font-size="12" fill="#fff" text-anchor="middle" dominant-baseline="middle">WILD</text></svg>`,
-            'OURO': `<svg viewBox="0 0 64 64" class="w-10 h-10"><rect x="16" y="20" width="32" height="24" fill="#ffd700" rx="3"/></svg>`,
-            'ENVELOPE': `<svg viewBox="0 0 64 64" class="w-10 h-10"><rect x="12" y="14" width="40" height="36" rx="4" fill="#e53935"/></svg>`,
-            'FOGOS': `<svg viewBox="0 0 64 64" class="w-10 h-10"><circle cx="32" cy="32" r="15" fill="#1e88e5"/></svg>`,
-            'LARANJA': `<svg viewBox="0 0 64 64" class="w-10 h-10"><circle cx="32" cy="36" r="16" fill="#ff9800"/></svg>`
+       const SVGS = {
+            'WILD': `<div class="flex flex-col items-center justify-center animate-bounce text-center"><span class="text-3xl filter drop-shadow">🐯</span><span class="text-[9px] bg-yellow-500 text-red-950 font-black px-1 rounded border border-white uppercase tracking-tighter">WILD</span></div>`,
+            'OURO': `<div class="text-center"><span class="text-3xl filter drop-shadow">💰</span><span class="text-[8px] text-amber-600 block font-bold">Lingote</span></div>`,
+            'ENVELOPE': `<div class="text-center"><span class="text-3xl filter drop-shadow">🧧</span><span class="text-[8px] text-red-600 block font-bold">Envelope</span></div>`,
+            'FOGOS': `<div class="text-center"><span class="text-3xl filter drop-shadow">🧨</span><span class="text-[8px] text-orange-500 block font-bold">Bombinha</span></div>`,
+            'LARANJA': `<div class="text-center"><span class="text-3xl filter drop-shadow">🍊</span><span class="text-[8px] text-amber-500 block font-bold">Sorte</span></div>`
         };
         let girando = false;
         let minesEmAndamento = false;
