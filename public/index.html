@@ -397,7 +397,7 @@ jogarTiger: async () => {
                     const resposta = await fetch('/api/jogar-tiger', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ aposta })
+                        body: JSON.stringify({ aposta, username: utilizadorLogado }) // <-- Adicionado aqui
                     });
                     
                     const data = await resposta.json();
@@ -448,34 +448,33 @@ jogarTiger: async () => {
                 }
             },
             iniciarMines: async () => {
-                const aposta = parseFloat(document.getElementById('mines-bet').value);
-                const minas = parseInt(document.getElementById('mines-count').value);
+const aposta = parseFloat(document.getElementById('mines-bet').value);
+        const minas = parseInt(document.getElementById('mines-count').value);
 
-                const res = await fetch('/api/mines/iniciar', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ aposta, minas })
-                });
-                const data = await res.json();
+        const res = await fetch('/api/mines/iniciar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ aposta, minas, username: utilizadorLogado })
+        });
+        const data = await res.json();
 
-                if(!res.ok) return UI.notify(data.erro, false);
+        if (!res.ok) return UI.notify(data.erro, false);
 
-                minesEmAndamento = true;
-                UI.atualizarSaldo();
-                UI.buildMinesGrid();
-                
-                for(let i=0; i<25; i++) document.getElementById(`mine-${i}`).disabled = false;
-                document.getElementById('btn-cashout-mines').disabled = false;
-                document.getElementById('btn-cashout-mines').classList.remove('opacity-50');
-                UI.notify("Mines Iniciado! Escolha as cartas.");
-            },
+        minesEmAndamento = true;
+        UI.atualizarSaldo();
+        UI.buildMinesGrid();
+
+        for (let i = 0; i < 25; i++) document.getElementById(`mine-${i}`).disabled = false;
+        document.getElementById('btn-cashout-mines').disabled = false;
+        document.getElementById('btn-cashout-mines').classList.remove('opacity-50');
+        UI.notify("Mines Iniciado! Escolha as cartas.");
             clicarMines: async (index) => {
                 if(!minesEmAndamento) return;
 
-                const res = await fetch('/api/mines/revelar', {
+              const res = await fetch('/api/mines/revelar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ index })
+                    body: JSON.stringify({ index, username: utilizadorLogado }) // <-- Corrigido aqui!
                 });
                 const data = await res.json();
 
