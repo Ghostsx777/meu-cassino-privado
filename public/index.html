@@ -454,8 +454,8 @@ jogarTiger: async () => {
                     girando = false;
                 }
             },
-            iniciarMines: async () => {
-const aposta = parseFloat(document.getElementById('mines-bet').value);
+iniciarMines: async () => {
+        const aposta = parseFloat(document.getElementById('mines-bet').value);
         const minas = parseInt(document.getElementById('mines-count').value);
 
         const res = await fetch('/api/mines/iniciar', {
@@ -475,35 +475,38 @@ const aposta = parseFloat(document.getElementById('mines-bet').value);
         document.getElementById('btn-cashout-mines').disabled = false;
         document.getElementById('btn-cashout-mines').classList.remove('opacity-50');
         UI.notify("Mines Iniciado! Escolha as cartas.");
-            clicarMines: async (index) => {
-                if(!minesEmAndamento) return;
+    }, // <--- Aqui fecha a iniciarMines perfeitamente!
 
-              const res = await fetch('/api/mines/revelar', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ index, username: utilizadorLogado }) // <-- Corrigido aqui!
-                });
-                const data = await res.json();
+    clicarMines: async (index) => {
+        if(!minesEmAndamento) return;
 
-                const btn = document.getElementById(`mine-${index}`);
-                if(data.perdeu) {
-                    btn.innerText = '💥';
-                    btn.classList.add('bg-red-600');
-                    UI.notify("BOMBA! Você perdeu tudo.", false);
-                    minesEmAndamento = false;
-                    document.getElementById('btn-cashout-mines').disabled = true;
-                    document.getElementById('btn-cashout-mines').classList.add('opacity-50');
-                    UI.atualizarSaldo();
-                } else {
-            btn.innerText = '💎';
-            btn.classList.add('bg-emerald-600');
-            btn.disabled = true;
-            document.getElementById('btn-cashout-mines').innerText = `Cashout (R$ ${data.proximoPremio.toFixed(2)})`;
+        try { // <--- Adicionado o try para o catch lá de baixo funcionar!
+            const res = await fetch('/api/mines/revelar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ index, username: utilizadorLogado })
+            });
+            const data = await res.json();
+
+            const btn = document.getElementById(`mine-${index}`);
+            if(data.perdeu) {
+                btn.innerText = '💥';
+                btn.classList.add('bg-red-600');
+                UI.notify("BOMBA! Você perdeu tudo.", false);
+                minesEmAndamento = false;
+                document.getElementById('btn-cashout-mines').disabled = true;
+                document.getElementById('btn-cashout-mines').classList.add('opacity-50');
+                UI.atualizarSaldo();
+            } else {
+                btn.innerText = '💎';
+                btn.classList.add('bg-emerald-600');
+                btn.disabled = true;
+                document.getElementById('btn-cashout-mines').innerText = `Cashout (R$ ${data.proximoPremio.toFixed(2)})`;
+            }
+        } catch (erro) {
+            console.error(erro);
         }
-    } catch (erro) {
-        console.error(erro);
-    }
-},
+    }, // <--- Fecha a clicarMines pronta para emendar com a cashoutMines abaixo
 cashoutMines: async () => {
     const res = await fetch('/api/mines/cashout', { method: 'POST' });
     const data = await res.json();
