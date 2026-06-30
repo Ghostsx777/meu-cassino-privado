@@ -313,12 +313,6 @@
 
         UI.notify("Conta criada com sucesso! Faça login.");
     },
-                const data = await res.json();
-
-                if (!res.ok) return UI.notify(data.erro, false);
-
-                UI.notify("Conta criada com sucesso! Faça login.");
-            },
             logout: () => {
                 localStorage.removeItem('ghost_user');
                 utilizadorLogado = null;
