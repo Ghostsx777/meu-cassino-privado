@@ -250,6 +250,7 @@
                 if(val < 1) val = 1;
                 inp.value = val;
                 document.getElementById('txt-aposta-display').innerText = val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            },
 jogarTiger: async () => {
                 if(girando) return;
                 const aposta = parseFloat(document.getElementById('global-bet-input').value);
