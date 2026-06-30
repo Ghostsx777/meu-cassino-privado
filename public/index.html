@@ -72,7 +72,7 @@
         <div class="space-y-2 pt-2">
             <button onclick="Auth.login()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-400 text-zinc-950 font-bold py-3 rounded-xl hover:brightness-110 active:scale-95 transition-all shadow-md text-sm uppercase tracking-wider">Entrar</button>
             <button onclick="Auth.cadastro()" class="w-full bg-zinc-800 border border-zinc-700 text-stone-300 font-bold py-3 rounded-xl hover:bg-zinc-700 active:scale-95 transition-all text-sm uppercase tracking-wider">Criar Nova Conta</button>
-        </div>
+       </div>
     </div>
 
     <div id="conteudo-cassino" class="w-full max-w-sm flex flex-col items-center justify-center space-y-4 hidden">
@@ -267,36 +267,52 @@
                 }
             },
             login: async () => {
-                const username = document.getElementById('auth-username').value;
-                const senha = document.getElementById('auth-senha').value;
+        const usernameInput = document.getElementById('auth-username');
+        const senhaInput = document.getElementById('auth-senha');
 
-                if (!username || !senha) return UI.notify("Preencha todos os campos.", false);
+        if (!usernameInput || !senhaInput) return UI.notify("Erro interno nos campos.", false);
 
-                const res = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, senha })
-                });
-                const data = await res.json();
+        const username = usernameInput.value.trim();
+        const senha = senhaInput.value.trim();
 
-                if (!res.ok) return UI.notify(data.erro, false);
+        if (!username || !senha) return UI.notify("Preencha todos os campos.", false);
 
-                localStorage.setItem('ghost_user', data.username);
-                utilizadorLogado = data.username;
-                UI.notify(`Bem-vindo, ${data.username}!`);
-                Auth.verificarSessao();
-            },
-            cadastro: async () => {
-                const username = document.getElementById('auth-username').value;
-                const senha = document.getElementById('auth-senha').value;
+        const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, senha })
+        });
+        const data = await res.json();
 
-                if (!username || !senha) return UI.notify("Preencha todos os campos.", false);
+        if (!res.ok) return UI.notify(data.erro, false);
 
-                const res = await fetch('/api/auth/cadastro', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, senha })
-                });
+        localStorage.setItem('ghost_user', data.username);
+        utilizadorLogado = data.username;
+        UI.notify(`Bem-vindo, ${data.username}!`);
+        Auth.verificarSessao();
+    },
+    cadastro: async () => {
+        const usernameInput = document.getElementById('auth-username');
+        const senhaInput = document.getElementById('auth-senha');
+
+        if (!usernameInput || !senhaInput) return UI.notify("Erro interno nos campos.", false);
+
+        const username = usernameInput.value.trim();
+        const senha = senhaInput.value.trim();
+
+        if (!username || !senha) return UI.notify("Preencha todos os campos.", false);
+
+        const res = await fetch('/api/auth/cadastro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, senha })
+        });
+        const data = await res.json();
+
+        if (!res.ok) return UI.notify(data.erro, false);
+
+        UI.notify("Conta criada com sucesso! Faça login.");
+    },
                 const data = await res.json();
 
                 if (!res.ok) return UI.notify(data.erro, false);
@@ -379,33 +395,30 @@ atualizarSaldo: async () => {
                 document.getElementById('txt-aposta-display').innerText = val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             },
 jogarTiger: async () => {
-                if(girando) return;
-                const aposta = parseFloat(document.getElementById('global-bet-input').value);
+            if (girando) return;
 
-                girando = true;
-                
-                // Inicia o giro ultra rápido em cascata
-                const r1 = document.getElementById('roll-1');
-                const r2 = document.getElementById('roll-2');
-                const r3 = document.getElementById('roll-3');
+            const apostaInput = document.getElementById('aposta-tiger');
+            const aposta = parseFloat(apostaInput.value);
 
-                r1.classList.add('blur-spin');
-                setTimeout(() => r2.classList.add('blur-spin'), 150);
-                setTimeout(() => r3.classList.add('blur-spin'), 300);
+            if (isNaN(aposta) || aposta < 1) {
+                return UI.notify("Insira uma aposta válida.", false);
+            }
 
-                try {
-                    const resposta = await fetch('/api/jogar-tiger', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ aposta, username: utilizadorLogado }) // <-- Adicionado aqui
-                    });
-                    
-                    const data = await resposta.json();
-                    
-                    if(!resposta.ok) {
-                        UI.notify(data.erro, false);
-                        throw new Error(data.erro);
-                    }
+            girando = true;
+            UI.audio.play('spin');
+
+            try {
+                const resposta = await fetch('/api/jogar-tiger', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ aposta, username: utilizadorLogado }) // <-- Envia o usuário logado
+                });
+                const data = await resposta.json();
+
+                if (!resposta.ok) {
+                    girando = false;
+                    return UI.notify(data.erro, false);
+                }
 
                     // Frenagem realista: Tempo maior de giro para criar a ilusão de desaceleração
                     setTimeout(() => {
@@ -544,9 +557,9 @@ const aposta = parseFloat(document.getElementById('mines-bet').value);
 window.addEventListener('DOMContentLoaded', () => { 
             lucide.createIcons(); 
             UI.setGradeInicial(); 
-            Auth.verificarSessao(); // Agora ele verifica a conta privada assim que liga!
+            Auth.verificarSessao();
         });
     </script>
-</div> 
+</div>
 </body>
 </html>
