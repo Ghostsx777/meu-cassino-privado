@@ -250,15 +250,16 @@
                 if(val < 1) val = 1;
                 inp.value = val;
                 document.getElementById('txt-aposta-display').innerText = val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            },
-            jogarTiger: async () => {
+jogarTiger: async () => {
                 if(girando) return;
                 const aposta = parseFloat(document.getElementById('global-bet-input').value);
 
                 girando = true;
+                
+                // Ativa o efeito de giro rápido em tempos levemente diferentes para cada coluna (efeito cascata)
                 document.getElementById('roll-1').classList.add('blur-spin');
-                document.getElementById('roll-2').classList.add('blur-spin');
-                document.getElementById('roll-3').classList.add('blur-spin');
+                setTimeout(() => document.getElementById('roll-2').classList.add('blur-spin'), 100);
+                setTimeout(() => document.getElementById('roll-3').classList.add('blur-spin'), 200);
 
                 try {
                     const resposta = await fetch('/api/jogar-tiger', {
@@ -274,15 +275,22 @@
                         throw new Error(data.erro);
                     }
 
+                    // Para as bobinas uma por uma com um pequeno intervalo, igual aos slots reais
                     setTimeout(() => {
                         document.getElementById('roll-1').classList.remove('blur-spin');
+                        for(let s=1; s<=3; s++) document.getElementById(`r1-s${s}`).innerHTML = SVGS[data.matriz[0][s-1]];
+                    }, 1200);
+
+                    setTimeout(() => {
                         document.getElementById('roll-2').classList.remove('blur-spin');
+                        for(let s=1; s<=3; s++) document.getElementById(`r2-s${s}`).innerHTML = SVGS[data.matriz[1][s-1]];
+                    }, 1500);
+
+                    setTimeout(() => {
                         document.getElementById('roll-3').classList.remove('blur-spin');
+                        for(let s=1; s<=3; s++) document.getElementById(`r3-s${s}`).innerHTML = SVGS[data.matriz[2][s-1]];
 
-                        for(let r=1; r<=3; r++) {
-                            for(let s=1; s<=3; s++) document.getElementById(`r${r}-s${s}`).innerHTML = SVGS[data.matriz[r-1][s-1]];
-                        }
-
+                        // Verifica o resultado final após a última coluna parar
                         if(data.ganhou) {
                             document.getElementById('txt-premio-display').innerText = "R$ " + data.premio.toFixed(2);
                             UI.notify(`VITÓRIA! +R$ ${data.premio.toFixed(2)}`);
@@ -291,7 +299,7 @@
                         }
                         UI.atualizarSaldo();
                         girando = false;
-                    }, 1000);
+                    }, 1800);
 
                 } catch (e) {
                     document.getElementById('roll-1').classList.remove('blur-spin');
