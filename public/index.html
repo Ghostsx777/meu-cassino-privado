@@ -537,7 +537,7 @@ cashoutMines: async () => {
                     UI.notify(data.erro, false); 
                 }
             },
-         gerarVoucher: async () => {
+        gerarVoucher: async () => {
         const senha = document.getElementById('admin-password').value;
         const valor = document.getElementById('admin-amount').value;
         const res = await fetch('/api/admin/gerar-voucher', {
@@ -548,37 +548,32 @@ cashoutMines: async () => {
         const data = await res.json();
         
         if (res.ok) {
-            // Mostra no console do navegador o que o servidor respondeu de verdade
             console.log("Retorno real da API:", data); 
-            
             const list = document.getElementById('vouchers-list');
             
-            // Cenário 1: Se o servidor realmente mandou um objeto 'lista'
             if (data.lista && typeof data.lista === 'object') {
                 list.innerHTML = Object.keys(data.lista).map(k => `<div>${k} -> R$ ${data.lista[k]}</div>`).join('');
             } 
-            // Cenário 2: Se o servidor mandou o cupom direto (ex: data.cupom, data.voucher, data.token ou data.code)
             else if (data.cupom || data.voucher || data.token || data.code) {
                 const codigoGerado = data.cupom || data.voucher || data.token || data.code;
                 list.innerHTML = `<div class="text-emerald-400 font-mono font-bold">${codigoGerado} -> R$ ${parseFloat(valor).toFixed(2)}</div>`;
             } 
-            // Cenário 3: Proteção para formatos desconhecidos
             else {
                 list.innerHTML = `<div class="text-gray-400 text-sm">Voucher criado! Verifique o console F12 para ver o formato.</div>`;
             }
-
             UI.notify("Token Criado!");
         } else { 
             UI.notify(data.erro, false); 
         }
-    }
+    } // Fim da função gerarVoucher
+}; // <--- ESSA CHAVE E PONTO E VÍRGULA FECHAM O OBJETO PRINCIPAL CORRETAMENTE!
 
 window.addEventListener('DOMContentLoaded', () => { 
-            lucide.createIcons(); 
-            UI.setGradeInicial(); 
-            Auth.verificarSessao();
-        });
-    </script>
+    lucide.createIcons(); 
+    UI.setGradeInicial(); 
+    Auth.verificarSessao();
+});
+</script>
 </div>
 </body>
 </html>
