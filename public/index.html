@@ -631,6 +631,48 @@
             UI.notify(data.erro, false);
         }
     },
+            logout: () => {
+        // 1. Limpa o armazenamento do navegador
+        localStorage.removeItem('utilizadorLogado');
+        localStorage.removeItem('username');
+        localStorage.removeItem('usuario');
+        sessionStorage.clear();
+
+        // 2. Limpa as variáveis da memória
+        if (typeof utilizadorLogado !== 'undefined') utilizadorLogado = null;
+        if (typeof usuarioLogado !== 'undefined') usuarioLogado = null;
+
+        // 3. Mostra o aviso na tela
+        if (typeof UI !== 'undefined' && UI.notify) {
+            UI.notify("Sessão encerrada!", true);
+        }
+
+        // 4. Recarrega a página para voltar ao login
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+    },
+       logout: () => {
+        // 1. Limpa o armazenamento do navegador
+        localStorage.removeItem('utilizadorLogado');
+        localStorage.removeItem('username');
+        localStorage.removeItem('usuario');
+        sessionStorage.clear();
+
+        // 2. Limpa as variáveis da memória
+        if (typeof utilizadorLogado !== 'undefined') utilizadorLogado = null;
+        if (typeof usuarioLogado !== 'undefined') usuarioLogado = null;
+
+        // 3. Mostra o aviso na tela
+        if (typeof UI !== 'undefined' && UI.notify) {
+            UI.notify("Sessão encerrada!", true);
+        }
+
+        // 4. Recarrega a página para voltar ao login
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+    },     
             gerarVoucher: async () => {
                 const senha = document.getElementById('admin-password').value;
                 const valor = document.getElementById('admin-amount').value;
