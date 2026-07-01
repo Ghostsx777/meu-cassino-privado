@@ -599,28 +599,36 @@ cashoutMines: async () => {
         }
     }
 };
+        gerarVoucher: async () => {
+        const senha = document.getElementById('admin-password').value;
+        const valor = document.getElementById('admin-amount').value;
+
+        const res = await fetch('/api/admin/gerar-voucher', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ senha, valor })
+        });
+
         const data = await res.json();
-        
+
         if (res.ok) {
-            console.log("Retorno real da API:", data); 
+            console.log("Retorno real da API:", data);
             const list = document.getElementById('vouchers-list');
-            
+
             if (data.lista && typeof data.lista === 'object') {
                 list.innerHTML = Object.keys(data.lista).map(k => `<div>${k} -> R$ ${data.lista[k]}</div>`).join('');
-            } 
-            else if (data.cupom || data.voucher || data.token || data.code) {
+            } else if (data.cupom || data.voucher || data.token || data.code) {
                 const codigoGerado = data.cupom || data.voucher || data.token || data.code;
                 list.innerHTML = `<div class="text-emerald-400 font-mono font-bold">${codigoGerado} -> R$ ${parseFloat(valor).toFixed(2)}</div>`;
-            } 
-            else {
+            } else {
                 list.innerHTML = `<div class="text-gray-400 text-sm">Voucher criado! Verifique o console F12 para ver o formato.</div>`;
             }
             UI.notify("Token Criado!");
-        } else { 
-            UI.notify(data.erro, false); 
+        } else {
+            UI.notify(data.erro, false);
         }
     } // Fim da função gerarVoucher
-}; // <--- ESSA CHAVE E PONTO E VÍRGULA FECHAM O OBJETO PRINCIPAL CORRETAMENTE!
+}; // Fechamento correto do objeto UI
 
 window.addEventListener('DOMContentLoaded', () => { 
     lucide.createIcons(); 
