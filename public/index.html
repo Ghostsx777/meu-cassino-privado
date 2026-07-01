@@ -589,26 +589,36 @@
             },
 
             resgatar: async () => {
-                const tokenInput = document.getElementById('input-cupom');
-                if (!tokenInput) return;
-                const token = tokenInput.value.trim();
+        const tokenInput = document.getElementById('input-cupom');
+        if (!tokenInput) return;
+        const token = tokenInput.value.trim();
+        
+        // Busca o usuário logado para enviar ao servidor
+        const usuarioAtivo = localStorage.getItem('utilizadorLogado');
 
-                const res = await fetch('/api/resgatar-voucher', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token })
-                });
-                const data = await res.json();
-                
-                if (res.ok) { 
-                    UI.notify("Saldo Carregado!"); 
-                    tokenInput.value = ''; 
-                    await UI.atualizarSaldo(); 
-                } else { 
-                    UI.notify(data.erro, false); 
-                }
-            },
+        if (!usuarioAtivo) {
+            UI.notify("Erro: Você precisa estar logado!", false);
+            return;
+        }
 
+        const res = await fetch('/api/resgatar-voucher', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                token, 
+                username: usuarioAtivo // 👈 Correção: Enviando o jogador correto
+            })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+            UI.notify("Saldo Carregado!");
+            tokenInput.value = '';
+            await UI.atualizarSaldo();
+        } else {
+            UI.notify(data.erro, false);
+        }
+    },
             gerarVoucher: async () => {
                 const senha = document.getElementById('admin-password').value;
                 const valor = document.getElementById('admin-amount').value;
