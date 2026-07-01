@@ -360,21 +360,27 @@
         // 🛑 BLOQUEIO SEGURO: Se o servidor rejeitar os dados, ele NÃO deixa passar!
         if (!res.ok) return UI.notify(data.erro || "Usuário ou senha incorretos!", false);
 
-        // Armazenamento limpo como string pura para manter coerência com o validador de sessão
-        localStorage.setItem('ghost_user', username);
-        utilizadorLogado = username;
-
-        UI.notify("Login realizado com sucesso!");
-        if (typeof UI !== 'undefined' && UI.atualizarSaldo) await UI.atualizarSaldo();
-        if (typeof UI !== 'undefined' && UI.mudarTela) UI.mudarTela('lobby');
-    },
-
-    logout: () => {
+       logout: () => {
+        // 1. Remove todas as possíveis chaves de sessão que o sistema possa usar
         localStorage.removeItem('ghost_user');
+        localStorage.removeItem('utilizadorLogado');
+        localStorage.removeItem('username');
+        localStorage.removeItem('usuario');
+        sessionStorage.clear();
+
+        // 2. Reseta a variável de memória
         utilizadorLogado = null;
-        window.location.reload();
-    }
-};
+
+        // 3. Feedback visual (opcional, mas recomendado)
+        if (typeof UI !== 'undefined' && UI.notify) {
+            UI.notify("Sessão encerrada!");
+        }
+
+        // 4. Redirecionamento forçado sem cache
+        setTimeout(() => {
+            window.location.href = window.location.pathname;
+        }, 500);
+    };
 
         let girando = false;
         let minesEmAndamento = false;
@@ -656,27 +662,27 @@
         }
     },
            
-       logout: () => {
-        // 1. Limpa o armazenamento do navegador
-        localStorage.removeItem('utilizadorLogado');
-        localStorage.removeItem('username');
-        localStorage.removeItem('usuario');
+      logout: () => {
+        // 1. Limpa o armazenamento de forma agressiva
+        localStorage.clear(); // Limpa TUDO o que for do domínio
         sessionStorage.clear();
 
-        // 2. Limpa as variáveis da memória
-        if (typeof utilizadorLogado !== 'undefined') utilizadorLogado = null;
-        if (typeof usuarioLogado !== 'undefined') usuarioLogado = null;
-
-        // 3. Mostra o aviso na tela
+        // 2. Mata as variáveis na memória e as força para null
+        window.utilizadorLogado = null;
+        window.usuarioLogado = null;
+        
+        // 3. Notifica o usuário
         if (typeof UI !== 'undefined' && UI.notify) {
             UI.notify("Sessão encerrada!", true);
         }
 
-        // 4. Recarrega a página para voltar ao login
+        // 4. O PULO DO GATO: Força o redirecionamento para o estado limpo
         setTimeout(() => {
-            window.location.reload();
-        }, 1000);
-    },     
+            // Em vez de recarregar, mandamos para o caminho base do site
+            // Isso ignora qualquer cache de estado que o reload() possa manter
+            window.location.href = window.location.origin + window.location.pathname;
+        }, 800);
+    },
             gerarVoucher: async () => {
                 const senha = document.getElementById('admin-password').value;
                 const valor = document.getElementById('admin-amount').value;
