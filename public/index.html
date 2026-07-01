@@ -357,31 +357,24 @@
         });
         const data = await res.json();
 
-        // 🛑 BLOQUEIO SEGURO: Se o servidor rejeitar os dados, ele NÃO deixa passar!
+                // 🛑 BLOQUEIO SEGURO: Se o servidor rejeitar os dados, ele NÃO deixa passar!
         if (!res.ok) return UI.notify(data.erro || "Usuário ou senha incorretos!", false);
 
-       logout: () => {
-        // 1. Remove todas as possíveis chaves de sessão que o sistema possa usar
+        // Armazenamento limpo como string pura para manter coerência com o validador de sessão
+        localStorage.setItem('ghost_user', username);
+        utilizadorLogado = username;
+
+        UI.notify("Login realizado com sucesso!");
+        if (typeof UI !== 'undefined' && UI.atualizarSaldo) await UI.atualizarSaldo();
+        if (typeof UI !== 'undefined' && UI.mudarTela) UI.mudarTela('lobby');
+    },
+
+    logout: () => {
         localStorage.removeItem('ghost_user');
-        localStorage.removeItem('utilizadorLogado');
-        localStorage.removeItem('username');
-        localStorage.removeItem('usuario');
-        sessionStorage.clear();
-
-        // 2. Reseta a variável de memória
         utilizadorLogado = null;
-
-        // 3. Feedback visual (opcional, mas recomendado)
-        if (typeof UI !== 'undefined' && UI.notify) {
-            UI.notify("Sessão encerrada!");
-        }
-
-        // 4. Redirecionamento forçado sem cache
-        setTimeout(() => {
-            window.location.href = window.location.pathname;
-        }, 500);
-    };
-
+        window.location.reload();
+    }
+};
         let girando = false;
         let minesEmAndamento = false;
 
