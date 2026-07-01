@@ -70,7 +70,8 @@
         </div>
 
         <div class="space-y-2 pt-2">
-            <button onclick="Auth.login()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-400 text-zinc-950 font-bold py-3 rounded-xl hover:brightness-110 active:scale-95 transition-all shadow-md text-sm uppercase tracking-wider">Entrar</button>
+            <button onclick="Auth.entrar()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-400 text-zinc-950 font-bold py-3 rounded-xl hover:brightness-110 active:scale-95 transition-all shadow-md text-sm uppercase tracking-wider">Entrar</button>
+            
             <button onclick="Auth.cadastro()" class="w-full bg-zinc-800 border border-zinc-700 text-stone-300 font-bold py-3 rounded-xl hover:bg-zinc-700 active:scale-95 transition-all text-sm uppercase tracking-wider">Criar Nova Conta</button>
        </div>
     </div>
@@ -291,7 +292,7 @@
         UI.notify(`Bem-vindo, ${data.username}!`);
         Auth.verificarSessao();
     },
-    cadastro: async () => {
+  cadastro: async () => {
         const usernameInput = document.getElementById('auth-username');
         const senhaInput = document.getElementById('auth-senha');
 
@@ -305,20 +306,52 @@
         const res = await fetch('/api/auth/cadastro', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, senha })
+            // Enviamos 'senha' e 'password' juntos para o back-end aceitar independente da validação dele
+            body: JSON.stringify({ username, senha, password: senha }) 
         });
         const data = await res.json();
 
-        if (!res.ok) return UI.notify(data.erro, false);
+        if (!res.ok) return UI.notify(data.erro || "Erro ao cadastrar!", false);
 
         UI.notify("Conta criada com sucesso! Faça login.");
     },
-            logout: () => {
-                localStorage.removeItem('ghost_user');
-                utilizadorLogado = null;
-                window.location.reload();
-            }
-        };
+
+    entrar: async () => {
+        const usernameInput = document.getElementById('auth-username');
+        const senhaInput = document.getElementById('auth-senha');
+
+        if (!usernameInput || !senhaInput) return UI.notify("Erro interno nos campos.", false);
+
+        const username = usernameInput.value.trim();
+        const senha = senhaInput.value.trim();
+
+        if (!username || !senha) return UI.notify("Preencha todos os campos.", false);
+
+        const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, senha, password: senha })
+        });
+        const data = await res.json();
+
+        // 🛑 BLOQUEIO SEGURO: Se o servidor rejeitar os dados, ele NÃO deixa passar!
+        if (!res.ok) return UI.notify(data.erro || "Usuário ou senha incorretos!", false);
+
+        // Só salva o usuário se o banco de dados der sinal verde
+        localStorage.setItem('ghost_user', JSON.stringify(username));
+        utilizadorLogado = username;
+
+        UI.notify("Login realizado com sucesso!");
+        if (typeof UI !== 'undefined' && UI.atualizarSaldo) await UI.atualizarSaldo();
+        if (typeof UI !== 'undefined' && UI.mudarTela) UI.mudarTela('lobby');
+    },
+
+    logout: () => {
+        localStorage.removeItem('ghost_user');
+        utilizadorLogado = null;
+        window.location.reload();
+    }
+};
         let girando = false;
         let minesEmAndamento = false;
 
@@ -508,43 +541,64 @@ iniciarMines: async () => {
         }
     }, // <--- Fecha a clicarMines pronta para emendar com a cashoutMines abaixo
 cashoutMines: async () => {
-    const res = await fetch('/api/mines/cashout', { method: 'POST' });
-    const data = await res.json();
+        const res = await fetch('/api/mines/cashout', { method: 'POST' });
+        const data = await res.json();
 
-    if (!res.ok) return UI.notify(data.erro, false);
+        if (!res.ok) return UI.notify(data.erro, false);
 
-                UI.notify(`Lucro salvo! +R$ ${data.ganho.toFixed(2)}`);
-                minesEmAndamento = false;
-                document.getElementById('btn-cashout-mines').disabled = true;
-                document.getElementById('btn-cashout-mines').classList.add('opacity-50');
-                document.getElementById('btn-cashout-mines').innerText = "Cashout";
-                UI.atualizarSaldo();
-                UI.buildMinesGrid();
-            },
-            resgatar: async () => {
-                const token = document.getElementById('input-cupom').value;
-                const res = await fetch('/api/resgatar-voucher', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token })
-                });
-                const data = await res.json();
-                if(res.ok) { 
-                    UI.notify("Saldo Carregado!"); 
-                    document.getElementById('input-cupom').value = ''; 
-                    await UI.atualizarSaldo(); 
-                } else { 
-                    UI.notify(data.erro, false); 
-                }
-            },
-        gerarVoucher: async () => {
+        UI.notify(`Lucro salvo! +R$ ${data.ganho.toFixed(2)}`);
+        minesEmAndamento = false;
+        
+        const btnCashout = document.getElementById('btn-cashout-mines');
+        if (btnCashout) {
+            btnCashout.disabled = true;
+            btnCashout.classList.add('opacity-50');
+            btnCashout.innerText = "Cashout";
+        }
+        
+        await UI.atualizarSaldo();
+        UI.buildMinesGrid();
+    },
+
+    resgatar: async () => {
+        const tokenInput = document.getElementById('input-cupom');
+        if (!tokenInput) return;
+        const token = tokenInput.value.trim();
+
+        const res = await fetch('/api/resgatar-voucher', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token })
+        });
+        const data = await res.json();
+        
+        if (res.ok) { 
+            UI.notify("Saldo Carregado!"); 
+            tokenInput.value = ''; 
+            await UI.atualizarSaldo(); 
+        } else { 
+            UI.notify(data.erro, false); 
+        }
+    },
+
+    gerarVoucher: async () => {
         const senha = document.getElementById('admin-password').value;
         const valor = document.getElementById('admin-amount').value;
+        
         const res = await fetch('/api/admin/gerar-voucher', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ senha, valor })
         });
+        const data = await res.json();
+        
+        if (res.ok) {
+            UI.notify(`Voucher gerado: ${data.token}`);
+        } else {
+            UI.notify(data.erro, false);
+        }
+    }
+};
         const data = await res.json();
         
         if (res.ok) {
