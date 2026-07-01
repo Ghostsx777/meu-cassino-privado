@@ -593,9 +593,21 @@
         if (!tokenInput) return;
         const token = tokenInput.value.trim();
         
-        // Busca o usuário logado para enviar ao servidor
-        const usuarioAtivo = localStorage.getItem('utilizadorLogado');
+        // Detecta o usuário automaticamente, não importa onde o front o guardou
+        let usuarioAtivo = null;
+        
+        if (typeof utilizadorLogado !== 'undefined' && utilizadorLogado) {
+            usuarioAtivo = utilizadorLogado;
+        } else if (typeof usuarioLogado !== 'undefined' && usuarioLogado) {
+            usuarioAtivo = usuarioLogado;
+        } else {
+            usuarioAtivo = localStorage.getItem('utilizadorLogado') || 
+                           localStorage.getItem('username') || 
+                           localStorage.getItem('usuario') ||
+                           sessionStorage.getItem('username');
+        }
 
+        // Se mesmo vasculhando tudo ainda não achar, aí sim avisa
         if (!usuarioAtivo) {
             UI.notify("Erro: Você precisa estar logado!", false);
             return;
@@ -606,7 +618,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 token, 
-                username: usuarioAtivo // 👈 Correção: Enviando o jogador correto
+                username: usuarioAtivo // Envia o usuário detectado
             })
         });
         const data = await res.json();
@@ -614,7 +626,7 @@
         if (res.ok) {
             UI.notify("Saldo Carregado!");
             tokenInput.value = '';
-            await UI.atualizarSaldo();
+            await UI.atualizarSaldo(); // Recarrega o saldo na tela na hora
         } else {
             UI.notify(data.erro, false);
         }
