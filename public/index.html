@@ -581,25 +581,7 @@ cashoutMines: async () => {
         }
     },
 
-    gerarVoucher: async () => {
-        const senha = document.getElementById('admin-password').value;
-        const valor = document.getElementById('admin-amount').value;
-        
-        const res = await fetch('/api/admin/gerar-voucher', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ senha, valor })
-        });
-        const data = await res.json();
-        
-        if (res.ok) {
-            UI.notify(`Voucher gerado: ${data.token}`);
-        } else {
-            UI.notify(data.erro, false);
-        }
-    }
-};
-        gerarVoucher: async () => {
+   gerarVoucher: async () => {
         const senha = document.getElementById('admin-password').value;
         const valor = document.getElementById('admin-amount').value;
 
@@ -627,12 +609,11 @@ cashoutMines: async () => {
         } else {
             UI.notify(data.erro, false);
         }
-    } // Fim da função gerarVoucher
-}; // Fechamento correto do objeto UI
-
-window.addEventListener('DOMContentLoaded', () => { 
-    lucide.createIcons(); 
-    UI.setGradeInicial(); 
+    }
+};
+        window.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    UI.setGradeInicial();
     Auth.verificarSessao();
 });
 </script>
