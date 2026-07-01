@@ -7,15 +7,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Fredoka:wght@600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Fredoka:wght@600;700&display=swap');
+        
         body { font-family: 'Fredoka', sans-serif; }
         .font-oriental { font-family: 'Archivo Black', sans-serif; }
         .bg-chinese-red { background: linear-gradient(180deg, #e53935 0%, #b71c1c 50%, #4a0000 100%); }
+        
         .gold-frame {
             border: 4px solid transparent;
             border-image: linear-gradient(to bottom, #fff9c4, #fbc02d, #f57f17, #fff9c4) 1;
             box-shadow: 0 0 20px rgba(251, 192, 45, 0.5), inset 0 0 12px rgba(0,0,0,0.7);
         }
+        
         .slot-window { background: linear-gradient(180deg, #fffdf4 0%, #fbebc6 100%); }
         
         /* 1️⃣ Efeito Ouro Animado com Luz do Sol */
@@ -33,6 +36,7 @@
             -webkit-text-fill-color: transparent;
             animation: shineGold 4s linear infinite;
         }
+        
         @keyframes shineGold {
             0% { background-position: 0% center; }
             100% { background-position: 200% center; }
@@ -44,12 +48,17 @@
             filter: blur(6px) brightness(1.3);
             will-change: transform;
         }
+        
         @keyframes giroInfinito {
             0% { transform: translateY(-100%); }
             100% { transform: translateY(100%); }
         }
         
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input::-webkit-outer-spin-button, 
+        input::-webkit-inner-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen flex flex-col items-center justify-center p-2">
@@ -70,10 +79,9 @@
         </div>
 
         <div class="space-y-2 pt-2">
-            <button onclick="Auth.entrar()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-400 text-zinc-950 font-bold py-3 rounded-xl hover:brightness-110 active:scale-95 transition-all shadow-md text-sm uppercase tracking-wider">Entrar</button>
-            
+            <button onclick="Auth.login()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-400 text-zinc-950 font-bold py-3 rounded-xl hover:brightness-110 active:scale-95 transition-all shadow-md text-sm uppercase tracking-wider">Entrar</button>
             <button onclick="Auth.cadastro()" class="w-full bg-zinc-800 border border-zinc-700 text-stone-300 font-bold py-3 rounded-xl hover:bg-zinc-700 active:scale-95 transition-all text-sm uppercase tracking-wider">Criar Nova Conta</button>
-       </div>
+        </div>
     </div>
 
     <div id="conteudo-cassino" class="w-full max-w-sm flex flex-col items-center justify-center space-y-4 hidden">
@@ -90,135 +98,126 @@
                 <button onclick="UI.toggleAdminModal(true)" class="text-stone-400 hover:text-yellow-500 p-1">🛡️</button>
             </div>
         </div>
-    <!-- CONTAINER PRINCIPAL HUB -->
-    <div class="w-full max-w-sm bg-zinc-900 rounded-b-[36px] border-b-4 border-x-4 border-stone-800 shadow-2xl overflow-hidden relative min-h-[550px] flex flex-col justify-between">
-        
-        <!-- ==================== TELA DO LOBBY (PAINEL DE JOGOS) ==================== -->
-      <div id="screen-lobby" class="p-5 flex-1 flex flex-col justify-start space-y-4">
-            <div class="text-center py-2">
-                <h1 class="text-2xl font-black tracking-widest font-oriental gold-shine-text drop-shadow-[0_2px_8px_rgba(251,192,45,0.3)]">GHOST CASSINO</h1>
-                <p class="text-[10px] text-zinc-400">Selecione uma modalidade abaixo para jogar</p>
-            </div>
 
-            <!-- Grid de Jogos (Aqui você adiciona novos botões/cards futuramente) -->
-            <div class="grid grid-cols-2 gap-3">
-                <!-- Card Fortune Tiger -->
-                <button onclick="UI.mudarTela('tiger')" class="bg-gradient-to-br from-amber-500 to-red-600 rounded-2xl p-4 flex flex-col items-center justify-center text-center gap-2 border-2 border-amber-400/30 hover:scale-105 transition-all shadow-lg group">
-                    <span class="text-4xl group-hover:animate-bounce">🐯</span>
-                    <div>
-                        <div class="text-xs font-black font-oriental text-white">FORTUNE TIGER</div>
-                        <div class="text-[8px] text-yellow-200 uppercase font-bold">Slots Sorte</div>
-                    </div>
-                </button>
-
-                <!-- Card Mines -->
-                <button onclick="UI.mudarTela('mines')" class="bg-gradient-to-br from-blue-600 to-indigo-900 rounded-2xl p-4 flex flex-col items-center justify-center text-center gap-2 border-2 border-blue-400/30 hover:scale-105 transition-all shadow-lg group">
-                    <span class="text-4xl group-hover:rotate-12 transition-transform">💣</span>
-                    <div>
-                        <div class="text-xs font-black text-white">MINES PREMIUM</div>
-                        <div class="text-[8px] text-blue-200 uppercase font-bold">Campos Minados</div>
-                    </div>
-                </button>
-
-                <!-- Card Placeholder para Futuros Jogos (Exemplo desativado) -->
-                <div class="bg-zinc-800/50 rounded-2xl p-4 flex flex-col items-center justify-center text-center gap-2 border border-dashed border-zinc-700 opacity-60">
-                    <span class="text-3xl text-zinc-600">🎰</span>
-                    <div>
-                        <div class="text-xs font-black text-zinc-500">EM BREVE</div>
-                        <div class="text-[8px] text-zinc-600 uppercase font-bold">Novo Slot</div>
-                    </div>
+        <div class="w-full max-w-sm bg-zinc-900 rounded-b-[36px] border-b-4 border-x-4 border-stone-800 shadow-2xl overflow-hidden relative min-h-[550px] flex flex-col justify-between">
+            
+            <div id="screen-lobby" class="p-5 flex-1 flex flex-col justify-start space-y-4">
+                <div class="text-center py-2">
+                    <h1 class="text-2xl font-black tracking-widest font-oriental gold-shine-text drop-shadow-[0_2px_8px_rgba(251,192,45,0.3)]">GHOST CASSINO</h1>
+                    <p class="text-[10px] text-zinc-400">Selecione uma modalidade abaixo para jogar</p>
                 </div>
-            </div>
-        </div>
 
-        <!-- ==================== INTERFACE FORTUNE TIGER ==================== -->
-        <div id="game-tiger" class="bg-chinese-red flex-1 flex flex-col justify-between relative hidden">
-            <div class="w-full bg-gradient-to-b from-emerald-600 to-emerald-800 pt-3 pb-2 text-center border-b-[3px] border-yellow-500">
-                <div class="text-4xl">🐯</div>
-                <h2 class="text-xs font-black text-yellow-400 tracking-widest font-oriental">FORTUNE TIGER</h2>
-            </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="UI.mudarTela('tiger')" class="bg-gradient-to-br from-amber-500 to-red-600 rounded-2xl p-4 flex flex-col items-center justify-center text-center gap-2 border-2 border-amber-400/30 hover:scale-105 transition-all shadow-lg group">
+                        <span class="text-4xl group-hover:animate-bounce">🐯</span>
+                        <div>
+                            <div class="text-xs font-black font-oriental text-white">FORTUNE TIGER</div>
+                            <div class="text-[8px] text-yellow-200 uppercase font-bold">Slots Sorte</div>
+                        </div>
+                    </button>
 
-            <div class="p-4 flex-1 flex flex-col justify-center">
-                <div class="grid grid-cols-3 gap-1 bg-amber-950 p-2 rounded-xl gold-frame relative">
-                    <div id="roll-1" class="slot-window rounded-l-lg p-1 flex flex-col justify-around items-center h-40 overflow-hidden">
-                        <div id="r1-s1" class="w-12 h-12 flex items-center justify-center"></div>
-                        <div id="r1-s2" class="w-12 h-12 flex items-center justify-center"></div>
-                        <div id="r1-s3" class="w-12 h-12 flex items-center justify-center"></div>
-                    </div>
-                    <div id="roll-2" class="slot-window p-1 flex flex-col justify-around items-center h-40 overflow-hidden">
-                        <div id="r2-s1" class="w-12 h-12 flex items-center justify-center"></div>
-                        <div id="r2-s2" class="w-12 h-12 flex items-center justify-center"></div>
-                        <div id="r2-s3" class="w-12 h-12 flex items-center justify-center"></div>
-                    </div>
-                    <div id="roll-3" class="slot-window rounded-r-lg p-1 flex flex-col justify-around items-center h-40 overflow-hidden">
-                        <div id="r3-s1" class="w-12 h-12 flex items-center justify-center"></div>
-                        <div id="r3-s2" class="w-12 h-12 flex items-center justify-center"></div>
-                        <div id="r3-s3" class="w-12 h-12 flex items-center justify-center"></div>
+                    <button onclick="UI.mudarTela('mines')" class="bg-gradient-to-br from-blue-600 to-indigo-900 rounded-2xl p-4 flex flex-col items-center justify-center text-center gap-2 border-2 border-blue-400/30 hover:scale-105 transition-all shadow-lg group">
+                        <span class="text-4xl group-hover:rotate-12 transition-transform">💣</span>
+                        <div>
+                            <div class="text-xs font-black text-white">MINES PREMIUM</div>
+                            <div class="text-[8px] text-blue-200 uppercase font-bold">Campos Minados</div>
+                        </div>
+                    </button>
+
+                    <div class="bg-zinc-800/50 rounded-2xl p-4 flex flex-col items-center justify-center text-center gap-2 border border-dashed border-zinc-700 opacity-60">
+                        <span class="text-3xl text-zinc-600">🎰</span>
+                        <div>
+                            <div class="text-xs font-black text-zinc-500">EM BREVE</div>
+                            <div class="text-[8px] text-zinc-600 uppercase font-bold">Novo Slot</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-red-950/90 px-3 py-2 grid grid-cols-2 gap-2 text-center font-mono text-[10px] text-yellow-200 border-t border-yellow-600/20">
-                <div class="bg-black/40 rounded py-1 border border-stone-800">
-                    <span class="text-stone-400 block text-[8px]">Aposta</span>
-                    <span id="txt-aposta-display" class="font-bold text-yellow-400">R$ 10,00</span>
+            <div id="game-tiger" class="bg-chinese-red flex-1 flex flex-col justify-between relative hidden">
+                <div class="w-full bg-gradient-to-b from-emerald-600 to-emerald-800 pt-3 pb-2 text-center border-b-[3px] border-yellow-500">
+                    <div class="text-4xl">🐯</div>
+                    <h2 class="text-xs font-black text-yellow-400 tracking-widest font-oriental">FORTUNE TIGER</h2>
                 </div>
-                <div class="bg-black/40 rounded py-1 border border-stone-800">
-                    <span class="text-stone-400 block text-[8px]">Prêmio Recente</span>
-                    <span id="txt-premio-display" class="font-bold text-emerald-400">R$ 0,00</span>
-                </div>
-            </div>
 
-            <div class="bg-stone-900 p-3 space-y-2">
-                <div class="flex items-center justify-center space-x-3">
-                    <button onclick="Core.ajustarAposta(-10)" class="w-8 h-8 rounded-full bg-amber-500 text-black font-black text-lg">-</button>
-                    <input type="number" id="global-bet-input" value="10" class="w-20 bg-black text-center text-yellow-400 font-mono rounded border border-stone-700 p-1 text-xs">
-                    <button onclick="Core.ajustarAposta(10)" class="w-8 h-8 rounded-full bg-amber-500 text-black font-black text-lg">+</button>
-                </div>
-                <button id="btn-spin" onclick="Core.jogarTiger()" class="w-full bg-emerald-600 hover:bg-emerald-500 font-bold py-2 rounded-xl text-xs uppercase tracking-wider">Girar Roleta</button>
-            </div>
-        </div>
-
-        <!-- ==================== INTERFACE MINES ==================== -->
-        <div id="game-mines" class="bg-zinc-950 flex-1 flex flex-col justify-between relative hidden">
-            <div class="w-full bg-gradient-to-b from-blue-700 to-blue-900 py-2 text-center border-b-[3px] border-blue-400">
-                <h2 class="text-xs font-black text-white tracking-widest">💣 MINES PREMIUM</h2>
-            </div>
-
-            <div class="p-4 flex-1 flex items-center justify-center">
-                <div id="mines-grid" class="grid grid-cols-5 gap-1.5 p-2 bg-zinc-900 rounded-xl border border-zinc-800 max-w-[280px]">
-                    <!-- Inserido dinamicamente via JS -->
-                </div>
-            </div>
-
-            <div class="bg-zinc-900 p-3 space-y-2 border-t border-zinc-800">
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-[9px] text-zinc-400 block mb-1">Aposta R$</label>
-                        <input type="number" id="mines-bet" value="10" class="w-full bg-black text-white p-1.5 rounded text-xs text-center border border-zinc-700">
-                    </div>
-                    <div>
-                        <label class="text-[9px] text-zinc-400 block mb-1">Minas (1-24)</label>
-                        <input type="number" id="mines-count" value="3" class="w-full bg-black text-white p-1.5 rounded text-xs text-center border border-zinc-700">
+                <div class="p-4 flex-1 flex flex-col justify-center">
+                    <div class="grid grid-cols-3 gap-1 bg-amber-950 p-2 rounded-xl gold-frame relative">
+                        <div id="roll-1" class="slot-window rounded-l-lg p-1 flex flex-col justify-around items-center h-40 overflow-hidden">
+                            <div id="r1-s1" class="w-12 h-12 flex items-center justify-center"></div>
+                            <div id="r1-s2" class="w-12 h-12 flex items-center justify-center"></div>
+                            <div id="r1-s3" class="w-12 h-12 flex items-center justify-center"></div>
+                        </div>
+                        <div id="roll-2" class="slot-window p-1 flex flex-col justify-around items-center h-40 overflow-hidden">
+                            <div id="r2-s1" class="w-12 h-12 flex items-center justify-center"></div>
+                            <div id="r2-s2" class="w-12 h-12 flex items-center justify-center"></div>
+                            <div id="r2-s3" class="w-12 h-12 flex items-center justify-center"></div>
+                        </div>
+                        <div id="roll-3" class="slot-window rounded-r-lg p-1 flex flex-col justify-around items-center h-40 overflow-hidden">
+                            <div id="r3-s1" class="w-12 h-12 flex items-center justify-center"></div>
+                            <div id="r3-s2" class="w-12 h-12 flex items-center justify-center"></div>
+                            <div id="r3-s3" class="w-12 h-12 flex items-center justify-center"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="flex space-x-2">
-                    <button id="btn-start-mines" onclick="Core.iniciarMines()" class="flex-1 bg-blue-600 font-bold py-2 rounded-xl text-xs uppercase">Começar Jogo</button>
-                    <button id="btn-cashout-mines" onclick="Core.cashoutMines()" disabled class="flex-1 bg-amber-600 opacity-50 font-bold py-2 rounded-xl text-xs uppercase">Cashout</button>
+
+                <div class="bg-red-950/90 px-3 py-2 grid grid-cols-2 gap-2 text-center font-mono text-[10px] text-yellow-200 border-t border-yellow-600/20">
+                    <div class="bg-black/40 rounded py-1 border border-stone-800">
+                        <span class="text-stone-400 block text-[8px]">Aposta</span>
+                        <span id="txt-aposta-display" class="font-bold text-yellow-400">R$ 10,00</span>
+                    </div>
+                    <div class="bg-black/40 rounded py-1 border border-stone-800">
+                        <span class="text-stone-400 block text-[8px]">Prêmio Recente</span>
+                        <span id="txt-premio-display" class="font-bold text-emerald-400">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <div class="bg-stone-900 p-3 space-y-2">
+                    <div class="flex items-center justify-center space-x-3">
+                        <button onclick="Core.ajustarAposta(-10)" class="w-8 h-8 rounded-full bg-amber-500 text-black font-black text-lg">-</button>
+                        <input type="number" id="global-bet-input" value="10" class="w-20 bg-black text-center text-yellow-400 font-mono rounded border border-stone-700 p-1 text-xs">
+                        <button onclick="Core.ajustarAposta(10)" class="w-8 h-8 rounded-full bg-amber-500 text-black font-black text-lg">+</button>
+                    </div>
+                    <button id="btn-spin" onclick="Core.jogarTiger()" class="w-full bg-emerald-600 hover:bg-emerald-500 font-bold py-2 rounded-xl text-xs uppercase tracking-wider">Girar Roleta</button>
                 </div>
             </div>
-        </div>
 
-        <!-- ABA DE RESGATAR CUPOM -->
-        <div class="p-3 bg-black border-t border-stone-900">
-            <div class="flex space-x-2 bg-stone-950 p-1 rounded-xl border border-stone-800">
-                <input type="text" id="input-cupom" placeholder="CÓDIGO DE RECARGA VOUCHER" class="w-full bg-transparent text-[10px] px-2 text-center uppercase tracking-widest text-slate-300 focus:outline-none">
-                <button onclick="Core.resgatar()" class="bg-amber-500 text-black text-[10px] font-bold px-4 py-1.5 rounded-lg transition hover:bg-amber-400">Resgatar</button>
+            <div id="game-mines" class="bg-zinc-950 flex-1 flex flex-col justify-between relative hidden">
+                <div class="w-full bg-gradient-to-b from-blue-700 to-blue-900 py-2 text-center border-b-[3px] border-blue-400">
+                    <h2 class="text-xs font-black text-white tracking-widest">💣 MINES PREMIUM</h2>
+                </div>
+
+                <div class="p-4 flex-1 flex items-center justify-center">
+                    <div id="mines-grid" class="grid grid-cols-5 gap-1.5 p-2 bg-zinc-900 rounded-xl border border-zinc-800 max-w-[280px]">
+                        </div>
+                </div>
+
+                <div class="bg-zinc-900 p-3 space-y-2 border-t border-zinc-800">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[9px] text-zinc-400 block mb-1">Aposta R$</label>
+                            <input type="number" id="mines-bet" value="10" class="w-full bg-black text-white p-1.5 rounded text-xs text-center border border-zinc-700">
+                        </div>
+                        <div>
+                            <label class="text-[9px] text-zinc-400 block mb-1">Minas (1-24)</label>
+                            <input type="number" id="mines-count" value="3" class="w-full bg-black text-white p-1.5 rounded text-xs text-center border border-zinc-700">
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button id="btn-start-mines" onclick="Core.iniciarMines()" class="flex-1 bg-blue-600 font-bold py-2 rounded-xl text-xs uppercase">Começar Jogo</button>
+                        <button id="btn-cashout-mines" onclick="Core.cashoutMines()" disabled class="flex-1 bg-amber-600 opacity-50 font-bold py-2 rounded-xl text-xs uppercase">Cashout</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 bg-black border-t border-stone-900">
+                <div class="flex space-x-2 bg-stone-950 p-1 rounded-xl border border-stone-800">
+                    <input type="text" id="input-cupom" placeholder="CÓDIGO DE RECARGA VOUCHER" class="w-full bg-transparent text-[10px] px-2 text-center uppercase tracking-widest text-slate-300 focus:outline-none">
+                    <button onclick="Core.resgatar()" class="bg-amber-500 text-black text-[10px] font-bold px-4 py-1.5 rounded-lg transition hover:bg-amber-400">Resgatar</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DO ADMIN -->
     <div id="modal-admin" class="fixed inset-0 bg-black/90 hidden flex items-center justify-center p-4 z-50">
         <div class="bg-stone-900 border-2 border-yellow-600 w-full max-w-xs rounded-2xl p-5 space-y-3">
             <h2 class="font-bold text-center text-yellow-500 font-oriental">Painel Gerenciador</h2>
@@ -240,6 +239,7 @@
             'FOGOS': `<div class="text-center"><span class="text-3xl filter drop-shadow">🧨</span><span class="text-[8px] text-orange-500 block font-bold">Bombinha</span></div>`,
             'LARANJA': `<div class="text-center"><span class="text-3xl filter drop-shadow">🍊</span><span class="text-[8px] text-amber-500 block font-bold">Sorte</span></div>`
         };
+
         // ==================== CONTROLE DE SESSÃO DO UTILIZADOR ====================
         let utilizadorLogado = localStorage.getItem('ghost_user') || null;
         let isAdmin = false;
@@ -268,48 +268,47 @@
                 }
             },
             login: async () => {
-        const usernameInput = document.getElementById('auth-username');
-        const senhaInput = document.getElementById('auth-senha');
+                const usernameInput = document.getElementById('auth-username');
+                const senhaInput = document.getElementById('auth-senha');
 
-        if (!usernameInput || !senhaInput) return UI.notify("Erro interno nos campos.", false);
+                if (!usernameInput || !senhaInput) return UI.notify("Erro interno nos campos.", false);
 
-        const username = usernameInput.value.trim();
-        const senha = senhaInput.value.trim();
+                const username = usernameInput.value.trim();
+                const senha = senhaInput.value.trim();
 
-        if (!username || !senha) return UI.notify("Preencha todos os campos.", false);
+                if (!username || !senha) return UI.notify("Preencha todos os campos.", false);
 
-        const res = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, senha })
-        });
-        const data = await res.json();
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, senha })
+                });
+                const data = await res.json();
 
-        if (!res.ok) return UI.notify(data.erro, false);
+                if (!res.ok) return UI.notify(data.erro, false);
 
-        localStorage.setItem('ghost_user', data.username);
-        utilizadorLogado = data.username;
-        UI.notify(`Bem-vindo, ${data.username}!`);
-        Auth.verificarSessao();
-    },
-  cadastro: async () => {
-        const usernameInput = document.getElementById('auth-username');
-        const senhaInput = document.getElementById('auth-senha');
+                localStorage.setItem('ghost_user', data.username);
+                utilizadorLogado = data.username;
+                UI.notify(`Bem-vindo, ${data.username}!`);
+                Auth.verificarSessao();
+            },
+            cadastro: async () => {
+                const usernameInput = document.getElementById('auth-username');
+                const senhaInput = document.getElementById('auth-senha');
 
-        if (!usernameInput || !senhaInput) return UI.notify("Erro interno nos campos.", false);
+                if (!usernameInput || !senhaInput) return UI.notify("Erro interno nos campos.", false);
 
-        const username = usernameInput.value.trim();
-        const senha = senhaInput.value.trim();
+                const username = usernameInput.value.trim();
+                const senha = senhaInput.value.trim();
 
-        if (!username || !senha) return UI.notify("Preencha todos os campos.", false);
+                if (!username || !senha) return UI.notify("Preencha todos os campos.", false);
 
-        const res = await fetch('/api/auth/cadastro', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            // Enviamos 'senha' e 'password' juntos para o back-end aceitar independente da validação dele
-            body: JSON.stringify({ username, senha, password: senha }) 
-        });
-        const data = await res.json();
+                const res = await fetch('/api/auth/cadastro', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, senha, password: senha }) 
+                });
+                const data = await res.json();
 
         if (!res.ok) return UI.notify(data.erro || "Erro ao cadastrar!", false);
 
@@ -337,8 +336,8 @@
         // 🛑 BLOQUEIO SEGURO: Se o servidor rejeitar os dados, ele NÃO deixa passar!
         if (!res.ok) return UI.notify(data.erro || "Usuário ou senha incorretos!", false);
 
-        // Só salva o usuário se o banco de dados der sinal verde
-        localStorage.setItem('ghost_user', JSON.stringify(username));
+        // Armazenamento limpo como string pura para manter coerência com o validador de sessão
+        localStorage.setItem('ghost_user', username);
         utilizadorLogado = username;
 
         UI.notify("Login realizado com sucesso!");
@@ -352,6 +351,7 @@
         window.location.reload();
     }
 };
+
         let girando = false;
         let minesEmAndamento = false;
 
@@ -369,45 +369,46 @@
                 // Mostrar/ocultar botão global de voltar para o lobby
                 document.getElementById('btn-lobby-global').classList.toggle('hidden', tela === 'lobby');
 
-                if(tela === 'mines') UI.buildMinesGrid();
+                if (tela === 'mines') UI.buildMinesGrid();
             },
-atualizarSaldo: async () => {
-            if (!utilizadorLogado) return;
-            try {
-                const res = await fetch('/api/utilizador/dados', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: utilizadorLogado })
-                });
-                const data = await res.json();
-                
-                if (data.isAdmin) {
-                    document.getElementById('saldo-display').innerText = `Dono: R$ ${data.saldo.toFixed(2)} | Lucro Banca: R$ ${data.bancaDono.toFixed(2)}`;
-                } else {
-                    document.getElementById('saldo-display').innerText = "R$ " + data.saldo.toFixed(2);
-                }
-            } catch (e) {}
-        },
-        toggleAdminModal: (show) => { document.getElementById('modal-admin').classList.toggle('hidden', !show); },
-        notify: (msg, s = true) => {
-            const c = document.getElementById('toast-container');
-            const t = document.createElement('div');
-            t.className = `p-3 rounded-xl shadow-2xl text-xs font-bold border my-2 ${s ? 'bg-emerald-950 text-emerald-400 border-emerald-800' : 'bg-red-955 text-red-400 border-red-900'}`;
-            t.innerText = msg;
-            c.appendChild(t);
-            setTimeout(() => t.remove(), 3000);
-        },
+            atualizarSaldo: async () => {
+                if (!utilizadorLogado) return;
+                try {
+                    const res = await fetch('/api/utilizador/dados', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: utilizadorLogado })
+                    });
+                    const data = await res.json();
+                    
+                    if (data.isAdmin) {
+                        document.getElementById('saldo-display').innerText = `Dono: R$ ${data.saldo.toFixed(2)} | Lucro Banca: R$ ${data.bancaDono.toFixed(2)}`;
+                    } else {
+                        document.getElementById('saldo-display').innerText = "R$ " + data.saldo.toFixed(2);
+                    }
+                } catch (e) {}
+            },
+            toggleAdminModal: (show) => { document.getElementById('modal-admin').classList.toggle('hidden', !show); },
+            notify: (msg, s = true) => {
+                const c = document.getElementById('toast-container');
+                const t = document.createElement('div');
+                // Corrigido bg-red-955 inválido para bg-red-950 estável do Tailwind
+                t.className = `p-3 rounded-xl shadow-2xl text-xs font-bold border my-2 ${s ? 'bg-emerald-950 text-emerald-400 border-emerald-800' : 'bg-red-950 text-red-400 border-red-900'}`;
+                t.innerText = msg;
+                c.appendChild(t);
+                setTimeout(() => t.remove(), 3000);
+            },
             setGradeInicial: () => {
                 const mock = ['OURO', 'WILD', 'FOGOS', 'ENVELOPE', 'ENVELOPE', 'LARANJA', 'LARANJA', 'WILD', 'OURO'];
                 let idx = 0;
-                for(let r=1; r<=3; r++){
-                    for(let s=1; s<=3; s++) document.getElementById(`r${r}-s${s}`).innerHTML = SVGS[mock[idx++]] || '💎';
+                for (let r = 1; r <= 3; r++) {
+                    for (let s = 1; s <= 3; s++) document.getElementById(`r${r}-s${s}`).innerHTML = SVGS[mock[idx++]] || '💎';
                 }
             },
             buildMinesGrid: () => {
                 const g = document.getElementById('mines-grid');
                 g.innerHTML = '';
-                for(let i=0; i<25; i++) {
+                for (let i = 0; i < 25; i++) {
                     g.innerHTML += `<button onclick="Core.clicarMines(${i})" id="mine-${i}" disabled class="w-11 h-11 bg-zinc-800 rounded-lg border border-zinc-700 flex items-center justify-center font-bold text-lg hover:bg-zinc-700 transition-all">❓</button>`;
                 }
             }
@@ -417,60 +418,80 @@ atualizarSaldo: async () => {
             ajustarAposta: (qtd) => {
                 const inp = document.getElementById('global-bet-input');
                 let val = (parseFloat(inp.value) || 10) + qtd;
-                if(val < 1) val = 1;
+                if (val < 1) val = 1;
                 inp.value = val;
                 document.getElementById('txt-aposta-display').innerText = val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             },
-jogarTiger: async () => {
-            if (girando) return;
+            jogarTiger: async () => {
+                if (girando) return;
 
-            const apostaInput = document.getElementById('aposta-tiger');
-            const aposta = parseFloat(apostaInput.value);
+                // Corrigido de 'aposta-tiger' para 'global-bet-input' para alinhar com o ID correto do HTML
+                const apostaInput = document.getElementById('global-bet-input');
+                if (!apostaInput) return UI.notify("Erro interno ao localizar dados de aposta.", false);
+                
+                const aposta = parseFloat(apostaInput.value);
 
-            if (isNaN(aposta) || aposta < 1) {
-                return UI.notify("Insira uma aposta válida.", false);
-            }
-
-            girando = true;
-            UI.audio.play('spin');
-
-            try {
-                const resposta = await fetch('/api/jogar-tiger', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ aposta, username: utilizadorLogado }) // <-- Envia o usuário logado
-                });
-                const data = await resposta.json();
-
-                if (!resposta.ok) {
-                    girando = false;
-                    return UI.notify(data.erro, false);
+                if (isNaN(aposta) || aposta < 1) {
+                    return UI.notify("Insira uma aposta válida.", false);
                 }
 
-                    // Frenagem realista: Tempo maior de giro para criar a ilusão de desaceleração
+                const r1 = document.getElementById('roll-1');
+                const r2 = document.getElementById('roll-2');
+                const r3 = document.getElementById('roll-3');
+
+                if (!r1 || !r2 || !r3) return UI.notify("Erro interno de carregamento das bobinas.", false);
+
+                girando = true;
+                
+                // Safe check preventivo para evitar falhas caso a biblioteca de áudio não inicialize
+                if (UI.audio && typeof UI.audio.play === 'function') {
+                    UI.audio.play('spin');
+                }
+
+                // Injeção da animação fluida de rotação nas bobinas
+                r1.classList.add('blur-spin');
+                r2.classList.add('blur-spin');
+                r3.classList.add('blur-spin');
+
+                try {
+                    const resposta = await fetch('/api/jogar-tiger', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ aposta, username: utilizadorLogado })
+                    });
+                    const data = await resposta.json();
+
+                    if (!resposta.ok) {
+                        girando = false;
+                        r1.classList.remove('blur-spin');
+                        r2.classList.remove('blur-spin');
+                        r3.classList.remove('blur-spin');
+                        return UI.notify(data.erro, false);
+                    }
+
+                    // Frenagem realista: Tempo maior de giro criando a ilusão de desaceleração mecânica
                     setTimeout(() => {
                         r1.classList.remove('blur-spin');
-                        // Efeito sutil de impacto ao parar
                         r1.style.transform = 'translateY(4px)';
                         setTimeout(() => r1.style.transform = 'translateY(0)', 100);
-                        for(let s=1; s<=3; s++) document.getElementById(`r1-s${s}`).innerHTML = SVGS[data.matriz[0][s-1]];
+                        for (let s = 1; s <= 3; s++) document.getElementById(`r1-s${s}`).innerHTML = SVGS[data.matriz[0][s-1]] || '💎';
                     }, 1500);
 
                     setTimeout(() => {
                         r2.classList.remove('blur-spin');
                         r2.style.transform = 'translateY(4px)';
                         setTimeout(() => r2.style.transform = 'translateY(0)', 100);
-                        for(let s=1; s<=3; s++) document.getElementById(`r2-s${s}`).innerHTML = SVGS[data.matriz[1][s-1]];
+                        for (let s = 1; s <= 3; s++) document.getElementById(`r2-s${s}`).innerHTML = SVGS[data.matriz[1][s-1]] || '💎';
                     }, 2000);
 
                     setTimeout(() => {
                         r3.classList.remove('blur-spin');
                         r3.style.transform = 'translateY(4px)';
                         setTimeout(() => r3.style.transform = 'translateY(0)', 100);
-                        for(let s=1; s<=3; s++) document.getElementById(`r3-s${s}`).innerHTML = SVGS[data.matriz[2][s-1]];
+                        for (let s = 1; s <= 3; s++) document.getElementById(`r3-s${s}`).innerHTML = SVGS[data.matriz[2][s-1]] || '💎';
 
-                        // Processa o prêmio após o travamento da última bobina
-                        if(data.ganhou) {
+                        // Processa o prêmio após o travamento da última bobina do slot
+                        if (data.ganhou) {
                             document.getElementById('txt-premio-display').innerText = "R$ " + data.premio.toFixed(2);
                             UI.notify(`VITÓRIA! +R$ ${data.premio.toFixed(2)}`);
                         } else {
@@ -487,136 +508,143 @@ jogarTiger: async () => {
                     girando = false;
                 }
             },
-iniciarMines: async () => {
-        const aposta = parseFloat(document.getElementById('mines-bet').value);
-        const minas = parseInt(document.getElementById('mines-count').value);
+            iniciarMines: async () => {
+                const aposta = parseFloat(document.getElementById('mines-bet').value);
+                const minas = parseInt(document.getElementById('mines-count').value);
 
-        const res = await fetch('/api/mines/iniciar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ aposta, minas, username: utilizadorLogado })
-        });
-        const data = await res.json();
+                const res = await fetch('/api/mines/iniciar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ aposta, minas, username: utilizadorLogado })
+                });
+                const data = await res.json();
 
-        if (!res.ok) return UI.notify(data.erro, false);
+                if (!res.ok) return UI.notify(data.erro, false);
 
-        minesEmAndamento = true;
-        UI.atualizarSaldo();
-        UI.buildMinesGrid();
-
-        for (let i = 0; i < 25; i++) document.getElementById(`mine-${i}`).disabled = false;
-        document.getElementById('btn-cashout-mines').disabled = false;
-        document.getElementById('btn-cashout-mines').classList.remove('opacity-50');
-        UI.notify("Mines Iniciado! Escolha as cartas.");
-    }, // <--- Aqui fecha a iniciarMines perfeitamente!
-
-    clicarMines: async (index) => {
-        if(!minesEmAndamento) return;
-
-        try { // <--- Adicionado o try para o catch lá de baixo funcionar!
-            const res = await fetch('/api/mines/revelar', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ index, username: utilizadorLogado })
-            });
-            const data = await res.json();
-
-            const btn = document.getElementById(`mine-${index}`);
-            if(data.perdeu) {
-                btn.innerText = '💥';
-                btn.classList.add('bg-red-600');
-                UI.notify("BOMBA! Você perdeu tudo.", false);
-                minesEmAndamento = false;
-                document.getElementById('btn-cashout-mines').disabled = true;
-                document.getElementById('btn-cashout-mines').classList.add('opacity-50');
+                minesEmAndamento = true;
                 UI.atualizarSaldo();
-            } else {
-                btn.innerText = '💎';
-                btn.classList.add('bg-emerald-600');
-                btn.disabled = true;
-                document.getElementById('btn-cashout-mines').innerText = `Cashout (R$ ${data.proximoPremio.toFixed(2)})`;
+                UI.buildMinesGrid();
+
+                for (let i = 0; i < 25; i++) document.getElementById(`mine-${i}`).disabled = false;
+                document.getElementById('btn-cashout-mines').disabled = false;
+                document.getElementById('btn-cashout-mines').classList.remove('opacity-50');
+                UI.notify("Mines Iniciado! Escolha as cartas.");
+            },
+
+            clicarMines: async (index) => {
+                if (!minesEmAndamento) return;
+
+                try {
+                    const res = await fetch('/api/mines/revelar', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ index, username: utilizadorLogado })
+                    });
+                    const data = await res.json();
+
+                    const btn = document.getElementById(`mine-${index}`);
+                    if (!btn) return;
+
+                    if (data.perdeu) {
+                        btn.innerText = '💥';
+                        btn.classList.add('bg-red-600');
+                        UI.notify("BOMBA! Você perdeu tudo.", false);
+                        minesEmAndamento = false;
+                        document.getElementById('btn-cashout-mines').disabled = true;
+                        document.getElementById('btn-cashout-mines').classList.add('opacity-50');
+                        UI.atualizarSaldo();
+                    } else {
+                        btn.innerText = '💎';
+                        btn.classList.add('bg-emerald-600');
+                        btn.disabled = true;
+                        document.getElementById('btn-cashout-mines').innerText = `Cashout (R$ ${data.proximoPremio.toFixed(2)})`;
+                    }
+                } catch (erro) {
+                    console.error(erro);
+                }
+            },
+            cashoutMines: async () => {
+                // Adicionado cabeçalhos e body contendo a sessão do utilizador para manter estabilidade e persistência
+                const res = await fetch('/api/mines/cashout', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: utilizadorLogado })
+                });
+                const data = await res.json();
+
+                if (!res.ok) return UI.notify(data.erro, false);
+
+                UI.notify(`Lucro salvo! +R$ ${data.ganho.toFixed(2)}`);
+                minesEmAndamento = false;
+                
+                const btnCashout = document.getElementById('btn-cashout-mines');
+                if (btnCashout) {
+                    btnCashout.disabled = true;
+                    btnCashout.classList.add('opacity-50');
+                    btnCashout.innerText = "Cashout";
+                }
+                
+                await UI.atualizarSaldo();
+                UI.buildMinesGrid();
+            },
+
+            resgatar: async () => {
+                const tokenInput = document.getElementById('input-cupom');
+                if (!tokenInput) return;
+                const token = tokenInput.value.trim();
+
+                const res = await fetch('/api/resgatar-voucher', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token })
+                });
+                const data = await res.json();
+                
+                if (res.ok) { 
+                    UI.notify("Saldo Carregado!"); 
+                    tokenInput.value = ''; 
+                    await UI.atualizarSaldo(); 
+                } else { 
+                    UI.notify(data.erro, false); 
+                }
+            },
+
+            gerarVoucher: async () => {
+                const senha = document.getElementById('admin-password').value;
+                const valor = document.getElementById('admin-amount').value;
+
+                const res = await fetch('/api/admin/gerar-voucher', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senha, valor })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    console.log("Retorno real da API:", data);
+                    const list = document.getElementById('vouchers-list');
+
+                    if (data.lista && typeof data.lista === 'object') {
+                        list.innerHTML = Object.keys(data.lista).map(k => `<div>${k} -> R$ ${data.lista[k]}</div>`).join('');
+                    } else if (data.cupom || data.voucher || data.token || data.code) {
+                        const codigoGerado = data.cupom || data.voucher || data.token || data.code;
+                        list.innerHTML = `<div class="text-emerald-400 font-mono font-bold">${codigoGerado} -> R$ ${parseFloat(valor).toFixed(2)}</div>`;
+                    } else {
+                        list.innerHTML = `<div class="text-gray-400 text-sm">Voucher criado! Verifique o console F12 para ver o formato.</div>`;
+                    }
+                    UI.notify("Token Criado!");
+                } else {
+                    UI.notify(data.erro, false);
+                }
             }
-        } catch (erro) {
-            console.error(erro);
-        }
-    }, // <--- Fecha a clicarMines pronta para emendar com a cashoutMines abaixo
-cashoutMines: async () => {
-        const res = await fetch('/api/mines/cashout', { method: 'POST' });
-        const data = await res.json();
+        };
 
-        if (!res.ok) return UI.notify(data.erro, false);
-
-        UI.notify(`Lucro salvo! +R$ ${data.ganho.toFixed(2)}`);
-        minesEmAndamento = false;
-        
-        const btnCashout = document.getElementById('btn-cashout-mines');
-        if (btnCashout) {
-            btnCashout.disabled = true;
-            btnCashout.classList.add('opacity-50');
-            btnCashout.innerText = "Cashout";
-        }
-        
-        await UI.atualizarSaldo();
-        UI.buildMinesGrid();
-    },
-
-    resgatar: async () => {
-        const tokenInput = document.getElementById('input-cupom');
-        if (!tokenInput) return;
-        const token = tokenInput.value.trim();
-
-        const res = await fetch('/api/resgatar-voucher', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token })
-        });
-        const data = await res.json();
-        
-        if (res.ok) { 
-            UI.notify("Saldo Carregado!"); 
-            tokenInput.value = ''; 
-            await UI.atualizarSaldo(); 
-        } else { 
-            UI.notify(data.erro, false); 
-        }
-    },
-
-   gerarVoucher: async () => {
-        const senha = document.getElementById('admin-password').value;
-        const valor = document.getElementById('admin-amount').value;
-
-        const res = await fetch('/api/admin/gerar-voucher', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ senha, valor })
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-            console.log("Retorno real da API:", data);
-            const list = document.getElementById('vouchers-list');
-
-            if (data.lista && typeof data.lista === 'object') {
-                list.innerHTML = Object.keys(data.lista).map(k => `<div>${k} -> R$ ${data.lista[k]}</div>`).join('');
-            } else if (data.cupom || data.voucher || data.token || data.code) {
-                const codigoGerado = data.cupom || data.voucher || data.token || data.code;
-                list.innerHTML = `<div class="text-emerald-400 font-mono font-bold">${codigoGerado} -> R$ ${parseFloat(valor).toFixed(2)}</div>`;
-            } else {
-                list.innerHTML = `<div class="text-gray-400 text-sm">Voucher criado! Verifique o console F12 para ver o formato.</div>`;
-            }
-            UI.notify("Token Criado!");
-        } else {
-            UI.notify(data.erro, false);
-        }
-    }
-};
         window.addEventListener('DOMContentLoaded', () => {
-    lucide.createIcons();
-    UI.setGradeInicial();
-    Auth.verificarSessao();
-});
-</script>
-</div>
-</body>
+            lucide.createIcons();
+            UI.setGradeInicial();
+            Auth.verificarSessao();
+        });
+    </script>
+    </div> </div> </body>
 </html>
